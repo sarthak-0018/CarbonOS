@@ -1,0 +1,2652 @@
+{
+  "nodes": [
+    {
+      "id": "file:backend/app/api/dependencies.py",
+      "type": "file",
+      "name": "backend/app/api/dependencies.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/api/dependencies.py:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/dependencies.py",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:backend/app/api/routes/domain.py",
+      "type": "file",
+      "name": "backend/app/api/routes/domain.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:service",
+      "type": "function",
+      "name": "service",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 18
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:_not_found",
+      "type": "function",
+      "name": "_not_found",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 22
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:create_profile",
+      "type": "function",
+      "name": "create_profile",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 30
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:create_profile_from_onboarding",
+      "type": "function",
+      "name": "create_profile_from_onboarding",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 36
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:get_profile",
+      "type": "function",
+      "name": "get_profile",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 41
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:update_profile",
+      "type": "function",
+      "name": "update_profile",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 46
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:list_profile_facts",
+      "type": "function",
+      "name": "list_profile_facts",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 51
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:create_profile_fact",
+      "type": "function",
+      "name": "create_profile_fact",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 56
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:update_profile_fact",
+      "type": "function",
+      "name": "update_profile_fact",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 61
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:delete_profile_fact",
+      "type": "function",
+      "name": "delete_profile_fact",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 66
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:list_assets",
+      "type": "function",
+      "name": "list_assets",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 72
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:create_asset",
+      "type": "function",
+      "name": "create_asset",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 77
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:update_asset",
+      "type": "function",
+      "name": "update_asset",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 82
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:retire_asset",
+      "type": "function",
+      "name": "retire_asset",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 87
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:asset_events",
+      "type": "function",
+      "name": "asset_events",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 92
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:list_activities",
+      "type": "function",
+      "name": "list_activities",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 97
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:create_activity",
+      "type": "function",
+      "name": "create_activity",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 102
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:update_activity",
+      "type": "function",
+      "name": "update_activity",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 107
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:delete_activity",
+      "type": "function",
+      "name": "delete_activity",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 112
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:list_emission_factors",
+      "type": "function",
+      "name": "list_emission_factors",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 118
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:calculate_activity",
+      "type": "function",
+      "name": "calculate_activity",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 123
+      }
+    },
+    {
+      "id": "func:backend/app/api/routes/domain.py:calculation_history",
+      "type": "function",
+      "name": "calculation_history",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/domain.py",
+        "lineno": 136
+      }
+    },
+    {
+      "id": "file:backend/app/api/routes/__init__.py",
+      "type": "file",
+      "name": "backend/app/api/routes/__init__.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/api/routes/__init__.py:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/routes/__init__.py",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:backend/app/api/__init__.py",
+      "type": "file",
+      "name": "backend/app/api/__init__.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/api/__init__.py:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/api/__init__.py",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:backend/app/calculations/contracts.py",
+      "type": "file",
+      "name": "backend/app/calculations/contracts.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/calculations/contracts.py:calculate",
+      "type": "function",
+      "name": "calculate",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/calculations/contracts.py",
+        "lineno": 29
+      }
+    },
+    {
+      "id": "file:backend/app/calculations/engine.py",
+      "type": "file",
+      "name": "backend/app/calculations/engine.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/calculations/engine.py:calculate",
+      "type": "function",
+      "name": "calculate",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/calculations/engine.py",
+        "lineno": 18
+      }
+    },
+    {
+      "id": "file:backend/app/calculations/normalization.py",
+      "type": "file",
+      "name": "backend/app/calculations/normalization.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/calculations/normalization.py:normalize_activity_key",
+      "type": "function",
+      "name": "normalize_activity_key",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/calculations/normalization.py",
+        "lineno": 6
+      }
+    },
+    {
+      "id": "func:backend/app/calculations/normalization.py:normalize_unit",
+      "type": "function",
+      "name": "normalize_unit",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/calculations/normalization.py",
+        "lineno": 22
+      }
+    },
+    {
+      "id": "file:backend/app/calculations/__init__.py",
+      "type": "file",
+      "name": "backend/app/calculations/__init__.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/calculations/__init__.py:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/calculations/__init__.py",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:backend/app/database/base.py",
+      "type": "file",
+      "name": "backend/app/database/base.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/database/base.py:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/database/base.py",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:backend/app/database/session.py",
+      "type": "file",
+      "name": "backend/app/database/session.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/database/session.py:get_session",
+      "type": "function",
+      "name": "get_session",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/database/session.py",
+        "lineno": 15
+      }
+    },
+    {
+      "id": "file:backend/app/database/__init__.py",
+      "type": "file",
+      "name": "backend/app/database/__init__.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/database/__init__.py:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/database/__init__.py",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:backend/app/main.py",
+      "type": "file",
+      "name": "backend/app/main.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/main.py:http_error_handler",
+      "type": "function",
+      "name": "http_error_handler",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/main.py",
+        "lineno": 13
+      }
+    },
+    {
+      "id": "func:backend/app/main.py:validation_error_handler",
+      "type": "function",
+      "name": "validation_error_handler",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/main.py",
+        "lineno": 19
+      }
+    },
+    {
+      "id": "func:backend/app/main.py:health",
+      "type": "function",
+      "name": "health",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/main.py",
+        "lineno": 25
+      }
+    },
+    {
+      "id": "file:backend/app/memory/contracts.py",
+      "type": "file",
+      "name": "backend/app/memory/contracts.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/memory/contracts.py:list_facts",
+      "type": "function",
+      "name": "list_facts",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/memory/contracts.py",
+        "lineno": 19
+      }
+    },
+    {
+      "id": "func:backend/app/memory/contracts.py:propose_fact",
+      "type": "function",
+      "name": "propose_fact",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/memory/contracts.py",
+        "lineno": 21
+      }
+    },
+    {
+      "id": "file:backend/app/memory/service.py",
+      "type": "file",
+      "name": "backend/app/memory/service.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/memory/service.py:__init__",
+      "type": "function",
+      "name": "__init__",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/memory/service.py",
+        "lineno": 15
+      }
+    },
+    {
+      "id": "func:backend/app/memory/service.py:list_facts",
+      "type": "function",
+      "name": "list_facts",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/memory/service.py",
+        "lineno": 18
+      }
+    },
+    {
+      "id": "func:backend/app/memory/service.py:propose_fact",
+      "type": "function",
+      "name": "propose_fact",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/memory/service.py",
+        "lineno": 26
+      }
+    },
+    {
+      "id": "func:backend/app/memory/service.py:_contract",
+      "type": "function",
+      "name": "_contract",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/memory/service.py",
+        "lineno": 41
+      }
+    },
+    {
+      "id": "table:profilefactrows",
+      "type": "table",
+      "name": "profilefactrows",
+      "source_system": "inferred_from_code",
+      "metadata": {
+        "inferred": true
+      }
+    },
+    {
+      "id": "file:backend/app/memory/__init__.py",
+      "type": "file",
+      "name": "backend/app/memory/__init__.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/memory/__init__.py:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/memory/__init__.py",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:backend/app/models/domain.py",
+      "type": "file",
+      "name": "backend/app/models/domain.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/models/domain.py:utc_now",
+      "type": "function",
+      "name": "utc_now",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/models/domain.py",
+        "lineno": 11
+      }
+    },
+    {
+      "id": "file:backend/app/models/__init__.py",
+      "type": "file",
+      "name": "backend/app/models/__init__.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/models/__init__.py:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/models/__init__.py",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:backend/app/schemas/domain.py",
+      "type": "file",
+      "name": "backend/app/schemas/domain.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:uppercase_country",
+      "type": "function",
+      "name": "uppercase_country",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 27
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:uppercase_updated_country",
+      "type": "function",
+      "name": "uppercase_updated_country",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 40
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:reject_null_required_profile_values",
+      "type": "function",
+      "name": "reject_null_required_profile_values",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 47
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:reject_null_asset_values",
+      "type": "function",
+      "name": "reject_null_asset_values",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 113
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:timestamp_must_include_timezone",
+      "type": "function",
+      "name": "timestamp_must_include_timezone",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 154
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:canonical_activity_key",
+      "type": "function",
+      "name": "canonical_activity_key",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 161
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:canonical_activity_unit",
+      "type": "function",
+      "name": "canonical_activity_unit",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 166
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:updated_timestamp_must_include_timezone",
+      "type": "function",
+      "name": "updated_timestamp_must_include_timezone",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 182
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:canonical_updated_activity_key",
+      "type": "function",
+      "name": "canonical_updated_activity_key",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 191
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:canonical_updated_activity_unit",
+      "type": "function",
+      "name": "canonical_updated_activity_unit",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 198
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:reject_null_updated_quantity",
+      "type": "function",
+      "name": "reject_null_updated_quantity",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 205
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/domain.py:reject_null_updated_details",
+      "type": "function",
+      "name": "reject_null_updated_details",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/domain.py",
+        "lineno": 212
+      }
+    },
+    {
+      "id": "file:backend/app/schemas/factors.py",
+      "type": "file",
+      "name": "backend/app/schemas/factors.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/schemas/factors.py:uppercase_geography",
+      "type": "function",
+      "name": "uppercase_geography",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/factors.py",
+        "lineno": 28
+      }
+    },
+    {
+      "id": "func:backend/app/schemas/factors.py:validate_verified_provenance",
+      "type": "function",
+      "name": "validate_verified_provenance",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/factors.py",
+        "lineno": 32
+      }
+    },
+    {
+      "id": "file:backend/app/schemas/__init__.py",
+      "type": "file",
+      "name": "backend/app/schemas/__init__.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/schemas/__init__.py:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/schemas/__init__.py",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:backend/app/services/domain.py",
+      "type": "file",
+      "name": "backend/app/services/domain.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/services/domain.py:__init__",
+      "type": "function",
+      "name": "__init__",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 18
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:_commit",
+      "type": "function",
+      "name": "_commit",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 29
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:_profile",
+      "type": "function",
+      "name": "_profile",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 35
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:_asset",
+      "type": "function",
+      "name": "_asset",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 41
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:_activity",
+      "type": "function",
+      "name": "_activity",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 47
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:create_profile",
+      "type": "function",
+      "name": "create_profile",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 53
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:create_profile_from_onboarding",
+      "type": "function",
+      "name": "create_profile_from_onboarding",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 58
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:get_profile",
+      "type": "function",
+      "name": "get_profile",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 72
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:update_profile",
+      "type": "function",
+      "name": "update_profile",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 75
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:list_facts",
+      "type": "function",
+      "name": "list_facts",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 81
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:create_fact",
+      "type": "function",
+      "name": "create_fact",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 85
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:update_fact",
+      "type": "function",
+      "name": "update_fact",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 91
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:delete_fact",
+      "type": "function",
+      "name": "delete_fact",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 99
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:_asset_snapshot",
+      "type": "function",
+      "name": "_asset_snapshot",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 107
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:list_assets",
+      "type": "function",
+      "name": "list_assets",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 110
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:create_asset",
+      "type": "function",
+      "name": "create_asset",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 117
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:update_asset",
+      "type": "function",
+      "name": "update_asset",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 125
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:retire_asset",
+      "type": "function",
+      "name": "retire_asset",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 137
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:list_asset_events",
+      "type": "function",
+      "name": "list_asset_events",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 147
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:list_activities",
+      "type": "function",
+      "name": "list_activities",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 151
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:create_activity",
+      "type": "function",
+      "name": "create_activity",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 155
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:update_activity",
+      "type": "function",
+      "name": "update_activity",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 163
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:delete_activity",
+      "type": "function",
+      "name": "delete_activity",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 172
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:list_factors",
+      "type": "function",
+      "name": "list_factors",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 178
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:calculate_activity",
+      "type": "function",
+      "name": "calculate_activity",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 188
+      }
+    },
+    {
+      "id": "func:backend/app/services/domain.py:list_calculations",
+      "type": "function",
+      "name": "list_calculations",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 234
+      }
+    },
+    {
+      "id": "table:assets",
+      "type": "table",
+      "name": "assets",
+      "source_system": "inferred_from_code",
+      "metadata": {
+        "inferred": true
+      }
+    },
+    {
+      "id": "table:activities",
+      "type": "table",
+      "name": "activities",
+      "source_system": "inferred_from_code",
+      "metadata": {
+        "inferred": true
+      }
+    },
+    {
+      "id": "table:profilefacts",
+      "type": "table",
+      "name": "profilefacts",
+      "source_system": "inferred_from_code",
+      "metadata": {
+        "inferred": true
+      }
+    },
+    {
+      "id": "table:assetevents",
+      "type": "table",
+      "name": "assetevents",
+      "source_system": "inferred_from_code",
+      "metadata": {
+        "inferred": true
+      }
+    },
+    {
+      "id": "table:emissionfactors",
+      "type": "table",
+      "name": "emissionfactors",
+      "source_system": "inferred_from_code",
+      "metadata": {
+        "inferred": true
+      }
+    },
+    {
+      "id": "table:calculationrecords",
+      "type": "table",
+      "name": "calculationrecords",
+      "source_system": "inferred_from_code",
+      "metadata": {
+        "inferred": true
+      }
+    },
+    {
+      "id": "file:backend/app/services/factors.py",
+      "type": "file",
+      "name": "backend/app/services/factors.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/services/factors.py:__init__",
+      "type": "function",
+      "name": "__init__",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/factors.py",
+        "lineno": 16
+      }
+    },
+    {
+      "id": "func:backend/app/services/factors.py:add_version",
+      "type": "function",
+      "name": "add_version",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/factors.py",
+        "lineno": 19
+      }
+    },
+    {
+      "id": "file:backend/app/services/__init__.py",
+      "type": "file",
+      "name": "backend/app/services/__init__.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/services/__init__.py:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/services/__init__.py",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:backend/app/__init__.py",
+      "type": "file",
+      "name": "backend/app/__init__.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/app/__init__.py:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/app/__init__.py",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:backend/migrations/env.py",
+      "type": "file",
+      "name": "backend/migrations/env.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/migrations/env.py:run_migrations_offline",
+      "type": "function",
+      "name": "run_migrations_offline",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/migrations/env.py",
+        "lineno": 15
+      }
+    },
+    {
+      "id": "func:backend/migrations/env.py:run_migrations_online",
+      "type": "function",
+      "name": "run_migrations_online",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/migrations/env.py",
+        "lineno": 21
+      }
+    },
+    {
+      "id": "file:backend/migrations/versions/20261001_0001_domain_foundation.py",
+      "type": "file",
+      "name": "backend/migrations/versions/20261001_0001_domain_foundation.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/migrations/versions/20261001_0001_domain_foundation.py:upgrade",
+      "type": "function",
+      "name": "upgrade",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/migrations/versions/20261001_0001_domain_foundation.py",
+        "lineno": 16
+      }
+    },
+    {
+      "id": "func:backend/migrations/versions/20261001_0001_domain_foundation.py:downgrade",
+      "type": "function",
+      "name": "downgrade",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/migrations/versions/20261001_0001_domain_foundation.py",
+        "lineno": 192
+      }
+    },
+    {
+      "id": "file:backend/tests/test_health.py",
+      "type": "file",
+      "name": "backend/tests/test_health.py",
+      "source_system": "python"
+    },
+    {
+      "id": "func:backend/tests/test_health.py:test_health_endpoint_is_live_without_database_access",
+      "type": "function",
+      "name": "test_health_endpoint_is_live_without_database_access",
+      "source_system": "python",
+      "metadata": {
+        "file": "backend/tests/test_health.py",
+        "lineno": 6
+      }
+    },
+    {
+      "id": "file:postcss.config.js",
+      "type": "file",
+      "name": "postcss.config.js",
+      "source_system": "javascript"
+    },
+    {
+      "id": "func:postcss.config.js:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "postcss.config.js",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:src/App.jsx",
+      "type": "file",
+      "name": "src/App.jsx",
+      "source_system": "javascript"
+    },
+    {
+      "id": "func:src/App.jsx:Shell",
+      "type": "function",
+      "name": "Shell",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 12
+      }
+    },
+    {
+      "id": "func:src/App.jsx:Title",
+      "type": "function",
+      "name": "Title",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 23
+      }
+    },
+    {
+      "id": "func:src/App.jsx:Button",
+      "type": "function",
+      "name": "Button",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 24
+      }
+    },
+    {
+      "id": "func:src/App.jsx:Landing",
+      "type": "function",
+      "name": "Landing",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 25
+      }
+    },
+    {
+      "id": "func:src/App.jsx:Feature",
+      "type": "function",
+      "name": "Feature",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 26
+      }
+    },
+    {
+      "id": "func:src/App.jsx:Onboarding",
+      "type": "function",
+      "name": "Onboarding",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 28
+      }
+    },
+    {
+      "id": "func:src/App.jsx:finish",
+      "type": "function",
+      "name": "finish",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 31
+      }
+    },
+    {
+      "id": "func:src/App.jsx:advance",
+      "type": "function",
+      "name": "advance",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 37
+      }
+    },
+    {
+      "id": "func:src/App.jsx:Dashboard",
+      "type": "function",
+      "name": "Dashboard",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 40
+      }
+    },
+    {
+      "id": "func:src/App.jsx:ActivityRow",
+      "type": "function",
+      "name": "ActivityRow",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 41
+      }
+    },
+    {
+      "id": "func:src/App.jsx:Profile",
+      "type": "function",
+      "name": "Profile",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 42
+      }
+    },
+    {
+      "id": "func:src/App.jsx:ActivityPage",
+      "type": "function",
+      "name": "ActivityPage",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 52
+      }
+    },
+    {
+      "id": "func:src/App.jsx:category",
+      "type": "function",
+      "name": "category",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 57
+      }
+    },
+    {
+      "id": "func:src/App.jsx:submit",
+      "type": "function",
+      "name": "submit",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 59
+      }
+    },
+    {
+      "id": "func:src/App.jsx:UploadPage",
+      "type": "function",
+      "name": "UploadPage",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 63
+      }
+    },
+    {
+      "id": "func:src/App.jsx:Simulator",
+      "type": "function",
+      "name": "Simulator",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 64
+      }
+    },
+    {
+      "id": "func:src/App.jsx:Insights",
+      "type": "function",
+      "name": "Insights",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 65
+      }
+    },
+    {
+      "id": "func:src/App.jsx:SettingsPage",
+      "type": "function",
+      "name": "SettingsPage",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 66
+      }
+    },
+    {
+      "id": "func:src/App.jsx:Assistant",
+      "type": "function",
+      "name": "Assistant",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 67
+      }
+    },
+    {
+      "id": "func:src/App.jsx:App",
+      "type": "function",
+      "name": "App",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/App.jsx",
+        "lineno": 69
+      }
+    },
+    {
+      "id": "file:src/main.jsx",
+      "type": "file",
+      "name": "src/main.jsx",
+      "source_system": "javascript"
+    },
+    {
+      "id": "func:src/main.jsx:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/main.jsx",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:src/services/api.js",
+      "type": "file",
+      "name": "src/services/api.js",
+      "source_system": "javascript"
+    },
+    {
+      "id": "func:src/services/api.js:request",
+      "type": "function",
+      "name": "request",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/services/api.js",
+        "lineno": 3
+      }
+    },
+    {
+      "id": "func:src/services/api.js:getHealth",
+      "type": "function",
+      "name": "getHealth",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/services/api.js",
+        "lineno": 13
+      }
+    },
+    {
+      "id": "func:src/services/api.js:getSavedProfileId",
+      "type": "function",
+      "name": "getSavedProfileId",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/services/api.js",
+        "lineno": 17
+      }
+    },
+    {
+      "id": "func:src/services/api.js:saveOnboarding",
+      "type": "function",
+      "name": "saveOnboarding",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/services/api.js",
+        "lineno": 19
+      }
+    },
+    {
+      "id": "func:src/services/api.js:getPersistedProfile",
+      "type": "function",
+      "name": "getPersistedProfile",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/services/api.js",
+        "lineno": 47
+      }
+    },
+    {
+      "id": "func:src/services/api.js:getPersistedActivities",
+      "type": "function",
+      "name": "getPersistedActivities",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/services/api.js",
+        "lineno": 56
+      }
+    },
+    {
+      "id": "func:src/services/api.js:createPersistedActivity",
+      "type": "function",
+      "name": "createPersistedActivity",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/services/api.js",
+        "lineno": 60
+      }
+    },
+    {
+      "id": "func:src/services/api.js:getDashboard",
+      "type": "function",
+      "name": "getDashboard",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/services/api.js",
+        "lineno": 66
+      }
+    },
+    {
+      "id": "func:src/services/api.js:getProfile",
+      "type": "function",
+      "name": "getProfile",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/services/api.js",
+        "lineno": 67
+      }
+    },
+    {
+      "id": "file:src/services/mockData.js",
+      "type": "file",
+      "name": "src/services/mockData.js",
+      "source_system": "javascript"
+    },
+    {
+      "id": "func:src/services/mockData.js:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "src/services/mockData.js",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:tailwind.config.js",
+      "type": "file",
+      "name": "tailwind.config.js",
+      "source_system": "javascript"
+    },
+    {
+      "id": "func:tailwind.config.js:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "tailwind.config.js",
+        "lineno": 1
+      }
+    },
+    {
+      "id": "file:vite.config.js",
+      "type": "file",
+      "name": "vite.config.js",
+      "source_system": "javascript"
+    },
+    {
+      "id": "func:vite.config.js:<module>",
+      "type": "function",
+      "name": "<module>",
+      "source_system": "javascript",
+      "metadata": {
+        "file": "vite.config.js",
+        "lineno": 1
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "func:backend/app/api/dependencies.py:<module>",
+      "target": "file:backend/app/api/dependencies.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/dependencies.py:1"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:service",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:18"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:_not_found",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:22"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:create_profile",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:30"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:create_profile_from_onboarding",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:36"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:get_profile",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:41"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:update_profile",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:46"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:list_profile_facts",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:51"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:create_profile_fact",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:56"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:update_profile_fact",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:61"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:delete_profile_fact",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:66"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:list_assets",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:72"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:create_asset",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:77"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:update_asset",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:82"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:retire_asset",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:87"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:asset_events",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:92"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:list_activities",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:97"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:create_activity",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:102"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:update_activity",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:107"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:delete_activity",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:112"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:list_emission_factors",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:118"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:calculate_activity",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:123"
+    },
+    {
+      "source": "func:backend/app/api/routes/domain.py:calculation_history",
+      "target": "file:backend/app/api/routes/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/domain.py:136"
+    },
+    {
+      "source": "func:backend/app/api/routes/__init__.py:<module>",
+      "target": "file:backend/app/api/routes/__init__.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/routes/__init__.py:1"
+    },
+    {
+      "source": "func:backend/app/api/__init__.py:<module>",
+      "target": "file:backend/app/api/__init__.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/api/__init__.py:1"
+    },
+    {
+      "source": "func:backend/app/calculations/contracts.py:calculate",
+      "target": "file:backend/app/calculations/contracts.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/calculations/contracts.py:29"
+    },
+    {
+      "source": "func:backend/app/calculations/engine.py:calculate",
+      "target": "file:backend/app/calculations/engine.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/calculations/engine.py:18"
+    },
+    {
+      "source": "func:backend/app/calculations/normalization.py:normalize_activity_key",
+      "target": "file:backend/app/calculations/normalization.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/calculations/normalization.py:6"
+    },
+    {
+      "source": "func:backend/app/calculations/normalization.py:normalize_unit",
+      "target": "file:backend/app/calculations/normalization.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/calculations/normalization.py:22"
+    },
+    {
+      "source": "func:backend/app/calculations/__init__.py:<module>",
+      "target": "file:backend/app/calculations/__init__.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/calculations/__init__.py:1"
+    },
+    {
+      "source": "func:backend/app/database/base.py:<module>",
+      "target": "file:backend/app/database/base.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/database/base.py:1"
+    },
+    {
+      "source": "func:backend/app/database/session.py:get_session",
+      "target": "file:backend/app/database/session.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/database/session.py:15"
+    },
+    {
+      "source": "func:backend/app/database/__init__.py:<module>",
+      "target": "file:backend/app/database/__init__.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/database/__init__.py:1"
+    },
+    {
+      "source": "func:backend/app/main.py:http_error_handler",
+      "target": "file:backend/app/main.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/main.py:13"
+    },
+    {
+      "source": "func:backend/app/main.py:validation_error_handler",
+      "target": "file:backend/app/main.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/main.py:19"
+    },
+    {
+      "source": "func:backend/app/main.py:health",
+      "target": "file:backend/app/main.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/main.py:25"
+    },
+    {
+      "source": "func:backend/app/memory/contracts.py:list_facts",
+      "target": "file:backend/app/memory/contracts.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/memory/contracts.py:19"
+    },
+    {
+      "source": "func:backend/app/memory/contracts.py:propose_fact",
+      "target": "file:backend/app/memory/contracts.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/memory/contracts.py:21"
+    },
+    {
+      "source": "func:backend/app/memory/service.py:__init__",
+      "target": "file:backend/app/memory/service.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/memory/service.py:15"
+    },
+    {
+      "source": "func:backend/app/memory/service.py:list_facts",
+      "target": "file:backend/app/memory/service.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/memory/service.py:18"
+    },
+    {
+      "source": "func:backend/app/memory/service.py:list_facts",
+      "target": "table:profilefactrows",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(ProfileFactRow)",
+      "metadata": {
+        "file": "backend/app/memory/service.py",
+        "lineno": 18,
+        "model": "ProfileFactRow"
+      }
+    },
+    {
+      "source": "func:backend/app/memory/service.py:propose_fact",
+      "target": "file:backend/app/memory/service.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/memory/service.py:26"
+    },
+    {
+      "source": "func:backend/app/memory/service.py:_contract",
+      "target": "file:backend/app/memory/service.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/memory/service.py:41"
+    },
+    {
+      "source": "func:backend/app/memory/__init__.py:<module>",
+      "target": "file:backend/app/memory/__init__.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/memory/__init__.py:1"
+    },
+    {
+      "source": "func:backend/app/models/domain.py:utc_now",
+      "target": "file:backend/app/models/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/models/domain.py:11"
+    },
+    {
+      "source": "func:backend/app/models/__init__.py:<module>",
+      "target": "file:backend/app/models/__init__.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/models/__init__.py:1"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:uppercase_country",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:27"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:uppercase_updated_country",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:40"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:reject_null_required_profile_values",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:47"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:reject_null_asset_values",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:113"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:timestamp_must_include_timezone",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:154"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:canonical_activity_key",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:161"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:canonical_activity_unit",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:166"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:updated_timestamp_must_include_timezone",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:182"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:canonical_updated_activity_key",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:191"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:canonical_updated_activity_unit",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:198"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:reject_null_updated_quantity",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:205"
+    },
+    {
+      "source": "func:backend/app/schemas/domain.py:reject_null_updated_details",
+      "target": "file:backend/app/schemas/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/domain.py:212"
+    },
+    {
+      "source": "func:backend/app/schemas/factors.py:uppercase_geography",
+      "target": "file:backend/app/schemas/factors.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/factors.py:28"
+    },
+    {
+      "source": "func:backend/app/schemas/factors.py:validate_verified_provenance",
+      "target": "file:backend/app/schemas/factors.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/factors.py:32"
+    },
+    {
+      "source": "func:backend/app/schemas/__init__.py:<module>",
+      "target": "file:backend/app/schemas/__init__.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/schemas/__init__.py:1"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:__init__",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:18"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:__init__",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:26"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:_commit",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:29"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:_profile",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:35"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:_asset",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:41"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:_asset",
+      "target": "table:assets",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(Asset)",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 41,
+        "model": "Asset"
+      }
+    },
+    {
+      "source": "func:backend/app/services/domain.py:_activity",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:47"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:_activity",
+      "target": "table:activities",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(Activity)",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 47,
+        "model": "Activity"
+      }
+    },
+    {
+      "source": "func:backend/app/services/domain.py:create_profile",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:53"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:create_profile_from_onboarding",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:58"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:get_profile",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:72"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:update_profile",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:75"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_facts",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:81"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_facts",
+      "target": "table:profilefacts",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(ProfileFact)",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 81,
+        "model": "ProfileFact"
+      }
+    },
+    {
+      "source": "func:backend/app/services/domain.py:create_fact",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:85"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:update_fact",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:91"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:update_fact",
+      "target": "table:profilefacts",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(ProfileFact)",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 91,
+        "model": "ProfileFact"
+      }
+    },
+    {
+      "source": "func:backend/app/services/domain.py:delete_fact",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:99"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:delete_fact",
+      "target": "table:profilefacts",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(ProfileFact)",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 99,
+        "model": "ProfileFact"
+      }
+    },
+    {
+      "source": "func:backend/app/services/domain.py:_asset_snapshot",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:107"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_assets",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:110"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_assets",
+      "target": "table:assets",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(Asset)",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 110,
+        "model": "Asset"
+      }
+    },
+    {
+      "source": "func:backend/app/services/domain.py:create_asset",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:117"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:update_asset",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:125"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:retire_asset",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:137"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_asset_events",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:147"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_asset_events",
+      "target": "table:assetevents",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(AssetEvent)",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 147,
+        "model": "AssetEvent"
+      }
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_activities",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:151"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_activities",
+      "target": "table:activities",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(Activity)",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 151,
+        "model": "Activity"
+      }
+    },
+    {
+      "source": "func:backend/app/services/domain.py:create_activity",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:155"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:update_activity",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:163"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:delete_activity",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:172"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_factors",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:178"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_factors",
+      "target": "table:emissionfactors",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(EmissionFactor)",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 178,
+        "model": "EmissionFactor"
+      }
+    },
+    {
+      "source": "func:backend/app/services/domain.py:calculate_activity",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:188"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:calculate_activity",
+      "target": "table:emissionfactors",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(EmissionFactor)",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 188,
+        "model": "EmissionFactor"
+      }
+    },
+    {
+      "source": "func:backend/app/services/domain.py:calculate_activity",
+      "target": "table:emissionfactors",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(EmissionFactor)",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 188,
+        "model": "EmissionFactor"
+      }
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_calculations",
+      "target": "file:backend/app/services/domain.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/domain.py:234"
+    },
+    {
+      "source": "func:backend/app/services/domain.py:list_calculations",
+      "target": "table:calculationrecords",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(CalculationRecord,",
+      "metadata": {
+        "file": "backend/app/services/domain.py",
+        "lineno": 234,
+        "model": "CalculationRecord"
+      }
+    },
+    {
+      "source": "func:backend/app/services/factors.py:__init__",
+      "target": "file:backend/app/services/factors.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/factors.py:16"
+    },
+    {
+      "source": "func:backend/app/services/factors.py:add_version",
+      "target": "file:backend/app/services/factors.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/factors.py:19"
+    },
+    {
+      "source": "func:backend/app/services/factors.py:add_version",
+      "target": "table:emissionfactors",
+      "type": "orm_call",
+      "confidence": 0.8,
+      "evidence": "select(EmissionFactor)",
+      "metadata": {
+        "file": "backend/app/services/factors.py",
+        "lineno": 19,
+        "model": "EmissionFactor"
+      }
+    },
+    {
+      "source": "func:backend/app/services/__init__.py:<module>",
+      "target": "file:backend/app/services/__init__.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/services/__init__.py:1"
+    },
+    {
+      "source": "func:backend/app/__init__.py:<module>",
+      "target": "file:backend/app/__init__.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/app/__init__.py:1"
+    },
+    {
+      "source": "func:backend/migrations/env.py:run_migrations_offline",
+      "target": "file:backend/migrations/env.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/migrations/env.py:15"
+    },
+    {
+      "source": "func:backend/migrations/env.py:run_migrations_online",
+      "target": "file:backend/migrations/env.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/migrations/env.py:21"
+    },
+    {
+      "source": "func:backend/migrations/versions/20261001_0001_domain_foundation.py:upgrade",
+      "target": "file:backend/migrations/versions/20261001_0001_domain_foundation.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/migrations/versions/20261001_0001_domain_foundation.py:16"
+    },
+    {
+      "source": "func:backend/migrations/versions/20261001_0001_domain_foundation.py:downgrade",
+      "target": "file:backend/migrations/versions/20261001_0001_domain_foundation.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/migrations/versions/20261001_0001_domain_foundation.py:192"
+    },
+    {
+      "source": "func:backend/tests/test_health.py:test_health_endpoint_is_live_without_database_access",
+      "target": "file:backend/tests/test_health.py",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in backend/tests/test_health.py:6"
+    },
+    {
+      "source": "func:postcss.config.js:<module>",
+      "target": "file:postcss.config.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in postcss.config.js:1"
+    },
+    {
+      "source": "func:src/App.jsx:Shell",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:12"
+    },
+    {
+      "source": "func:src/App.jsx:Title",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:23"
+    },
+    {
+      "source": "func:src/App.jsx:Button",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:24"
+    },
+    {
+      "source": "func:src/App.jsx:Landing",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:25"
+    },
+    {
+      "source": "func:src/App.jsx:Feature",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:26"
+    },
+    {
+      "source": "func:src/App.jsx:Onboarding",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:28"
+    },
+    {
+      "source": "func:src/App.jsx:finish",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:31"
+    },
+    {
+      "source": "func:src/App.jsx:advance",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:37"
+    },
+    {
+      "source": "func:src/App.jsx:Dashboard",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:40"
+    },
+    {
+      "source": "func:src/App.jsx:ActivityRow",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:41"
+    },
+    {
+      "source": "func:src/App.jsx:Profile",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:42"
+    },
+    {
+      "source": "func:src/App.jsx:ActivityPage",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:52"
+    },
+    {
+      "source": "func:src/App.jsx:category",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:57"
+    },
+    {
+      "source": "func:src/App.jsx:submit",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:59"
+    },
+    {
+      "source": "func:src/App.jsx:UploadPage",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:63"
+    },
+    {
+      "source": "func:src/App.jsx:Simulator",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:64"
+    },
+    {
+      "source": "func:src/App.jsx:Insights",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:65"
+    },
+    {
+      "source": "func:src/App.jsx:SettingsPage",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:66"
+    },
+    {
+      "source": "func:src/App.jsx:Assistant",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:67"
+    },
+    {
+      "source": "func:src/App.jsx:App",
+      "target": "file:src/App.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/App.jsx:69"
+    },
+    {
+      "source": "func:src/main.jsx:<module>",
+      "target": "file:src/main.jsx",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/main.jsx:1"
+    },
+    {
+      "source": "func:src/services/api.js:request",
+      "target": "file:src/services/api.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/services/api.js:3"
+    },
+    {
+      "source": "func:src/services/api.js:getHealth",
+      "target": "file:src/services/api.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/services/api.js:13"
+    },
+    {
+      "source": "func:src/services/api.js:getSavedProfileId",
+      "target": "file:src/services/api.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/services/api.js:17"
+    },
+    {
+      "source": "func:src/services/api.js:saveOnboarding",
+      "target": "file:src/services/api.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/services/api.js:19"
+    },
+    {
+      "source": "func:src/services/api.js:getPersistedProfile",
+      "target": "file:src/services/api.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/services/api.js:47"
+    },
+    {
+      "source": "func:src/services/api.js:getPersistedActivities",
+      "target": "file:src/services/api.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/services/api.js:56"
+    },
+    {
+      "source": "func:src/services/api.js:createPersistedActivity",
+      "target": "file:src/services/api.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/services/api.js:60"
+    },
+    {
+      "source": "func:src/services/api.js:getDashboard",
+      "target": "file:src/services/api.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/services/api.js:66"
+    },
+    {
+      "source": "func:src/services/api.js:getProfile",
+      "target": "file:src/services/api.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/services/api.js:67"
+    },
+    {
+      "source": "func:src/services/mockData.js:<module>",
+      "target": "file:src/services/mockData.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in src/services/mockData.js:1"
+    },
+    {
+      "source": "func:tailwind.config.js:<module>",
+      "target": "file:tailwind.config.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in tailwind.config.js:1"
+    },
+    {
+      "source": "func:vite.config.js:<module>",
+      "target": "file:vite.config.js",
+      "type": "structural_belongs_to",
+      "confidence": 1,
+      "evidence": "in vite.config.js:1"
+    }
+  ],
+  "metrics": {
+    "total_nodes": 170,
+    "total_edges": 144,
+    "code_to_db": {
+      "total_access_calls": 14,
+      "static_sql_count": 0,
+      "orm_call_count": 14,
+      "dynamic_unresolved_count": 0,
+      "dynamic_unresolved_ratio": 0
+    }
+  }
+}
