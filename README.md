@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CarbonOS
 
 **Your personal carbon footprint, without the spreadsheets.**
@@ -54,3 +55,6 @@ Landing, onboarding, dashboard, profile, activity timeline, receipt and bill upl
 ## Next steps
 
 Source and review geographically and temporally appropriate emission factors, add calculation/domain tests, implement authentication and user isolation, then add OCR/AI behind optional, separately reviewed interfaces.
+=======
+# CarbonOS
+>>>>>>> 67899951d106be4a9416addb5079597157e8f0e8
