@@ -1,0 +1,1 @@
+Alembic owns the CarbonOS schema. The initial revision creates profile, fact, asset, activity, emission-factor and calculation-audit tables. Emission-factor seeds are TODO rows with NULL values; they are not scientific data.
