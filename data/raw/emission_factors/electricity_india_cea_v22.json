@@ -1,0 +1,17 @@
+{
+  "category": "electricity",
+  "activity_type": "electricity_grid_kwh",
+  "geography": "India",
+  "unit": "kWh",
+  "factor": 0.675,
+  "factor_unit": "kgCO2/kWh",
+  "gas": "CO2",
+  "source": "Central Electricity Authority",
+  "source_url": "https://cea.nic.in/wp-content/uploads/baseline/2026/09/User_Guide__Version_22.0.pdf",
+  "source_year": 2026,
+  "source_version": "22.0",
+  "reference_period_start": "2025-04-01",
+  "reference_period_end": "2026-03-31",
+  "methodology": "CEA CO2 Baseline Database, Version 22.0, weighted average Indian Grid emission factor for FY 2025-26; 0.675 tCO2/MWh converted to 0.675 kgCO2/kWh.",
+  "status": "APPROVED"
+}

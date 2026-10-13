@@ -19,6 +19,8 @@ class Profile(Base):
     display_name: Mapped[str] = mapped_column(String(120), default="", nullable=False)
     country_code: Mapped[str] = mapped_column(String(2), default="IN", nullable=False)
     city: Mapped[str | None] = mapped_column(String(120))
+    state: Mapped[str | None] = mapped_column(String(120))
+    diet_type: Mapped[str | None] = mapped_column(String(40))
     household_size: Mapped[int | None] = mapped_column(Integer)
     preferences: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
@@ -27,6 +29,7 @@ class Profile(Base):
     facts: Mapped[list["ProfileFact"]] = relationship(back_populates="profile", cascade="all, delete-orphan")
     assets: Mapped[list["Asset"]] = relationship(back_populates="profile", cascade="all, delete-orphan")
     activities: Mapped[list["Activity"]] = relationship(back_populates="profile", cascade="all, delete-orphan")
+    footprint_sessions: Mapped[list["FootprintSession"]] = relationship(back_populates="profile", cascade="all, delete-orphan")
 
     __table_args__ = (CheckConstraint("household_size IS NULL OR household_size > 0", name="ck_profiles_household_size_positive"),)
 
@@ -68,6 +71,8 @@ class Asset(Base):
     retired_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     profile: Mapped[Profile] = relationship(back_populates="assets")
     events: Mapped[list["AssetEvent"]] = relationship(back_populates="asset", cascade="all, delete-orphan", order_by="AssetEvent.created_at")
+    vehicle: Mapped["Vehicle | None"] = relationship(back_populates="asset", cascade="all, delete-orphan", uselist=False)
+    appliance: Mapped["Appliance | None"] = relationship(back_populates="asset", cascade="all, delete-orphan", uselist=False)
 
     __table_args__ = (
         CheckConstraint("status IN ('ACTIVE','INACTIVE')", name="ck_assets_status"),
@@ -140,15 +145,31 @@ class EmissionFactor(Base):
     valid_from: Mapped[date | None] = mapped_column(Date)
     valid_to: Mapped[date | None] = mapped_column(Date)
     methodology_note: Mapped[str | None] = mapped_column(Text)
+    # Canonical names for provenance-facing consumers; legacy aliases above remain API compatible.
+    activity_type: Mapped[str | None] = mapped_column(String(100))
+    geography: Mapped[str | None] = mapped_column(String(80))
+    unit: Mapped[str | None] = mapped_column(String(32))
+    factor: Mapped[Decimal | None] = mapped_column(Numeric(24, 12))
+    factor_unit: Mapped[str | None] = mapped_column(String(32))
+    source: Mapped[str | None] = mapped_column(String(200))
+    source_year: Mapped[int | None] = mapped_column(Integer)
+    gas: Mapped[str] = mapped_column(String(8), default="CO2E", nullable=False)
+    reference_period_start: Mapped[date | None] = mapped_column(Date)
+    reference_period_end: Mapped[date | None] = mapped_column(Date)
+    methodology: Mapped[str | None] = mapped_column(Text)
+    uncertainty: Mapped[Decimal | None] = mapped_column(Numeric(12, 6))
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, onupdate=utc_now, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
     calculations: Mapped[list["CalculationRecord"]] = relationship(back_populates="factor")
 
     __table_args__ = (
         UniqueConstraint("factor_key", "geography_code", "version", name="uq_emission_factor_key_geo_version"),
         CheckConstraint("version > 0", name="ck_emission_factor_version_positive"),
-        CheckConstraint("status IN ('TODO','DRAFT','VERIFIED','RETIRED')", name="ck_emission_factor_status"),
+        CheckConstraint("status IN ('TODO','DRAFT','VERIFIED','RETIRED','REVIEW','APPROVED','DEPRECATED')", name="ck_emission_factor_status"),
         CheckConstraint("value_kg_co2e_per_unit IS NULL OR value_kg_co2e_per_unit >= 0", name="ck_emission_factor_value_nonnegative"),
-        CheckConstraint("(status != 'VERIFIED') OR (value_kg_co2e_per_unit IS NOT NULL AND source_name IS NOT NULL AND source_url IS NOT NULL AND source_version IS NOT NULL AND source_license IS NOT NULL AND accessed_on IS NOT NULL AND valid_from IS NOT NULL)", name="ck_verified_factor_has_provenance"),
+        CheckConstraint("gas IN ('CO2','CH4','N2O','CO2E')", name="ck_emission_factor_gas"),
+        CheckConstraint("reference_period_end IS NULL OR reference_period_start IS NULL OR reference_period_end >= reference_period_start", name="ck_emission_factor_reference_period"),
+        CheckConstraint("(status NOT IN ('VERIFIED','APPROVED')) OR (value_kg_co2e_per_unit IS NOT NULL AND source_name IS NOT NULL AND source_url IS NOT NULL AND source_version IS NOT NULL AND accessed_on IS NOT NULL)", name="ck_verified_factor_has_provenance"),
         CheckConstraint("valid_to IS NULL OR valid_from IS NULL OR valid_to >= valid_from", name="ck_emission_factor_validity_range"),
         Index("ix_emission_factor_lookup", "factor_key", "geography_code", "status", "valid_from"),
     )
@@ -165,6 +186,7 @@ class CalculationRecord(Base):
     factor_value_snapshot: Mapped[Decimal] = mapped_column(Numeric(24, 12), nullable=False)
     emissions_kg_co2e: Mapped[Decimal] = mapped_column(Numeric(24, 6), nullable=False)
     methodology_version: Mapped[str] = mapped_column(String(40), nullable=False)
+    gas: Mapped[str] = mapped_column(String(8), default="CO2E", nullable=False)
     calculated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
     activity: Mapped[Activity] = relationship(back_populates="calculations")
     factor: Mapped[EmissionFactor] = relationship(back_populates="calculations")
@@ -175,3 +197,61 @@ class CalculationRecord(Base):
         CheckConstraint("emissions_kg_co2e >= 0", name="ck_calculation_emissions_nonnegative"),
         Index("ix_calculations_activity_time", "activity_id", "calculated_at"),
     )
+
+
+class Vehicle(Base):
+    __tablename__ = "vehicles"
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    asset_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("assets.id", ondelete="CASCADE"), unique=True, nullable=False)
+    fuel_type: Mapped[str | None] = mapped_column(String(32))
+    engine_capacity: Mapped[Decimal | None] = mapped_column(Numeric(10, 2))
+    fuel_efficiency: Mapped[Decimal | None] = mapped_column(Numeric(10, 4))
+    model_year: Mapped[int | None] = mapped_column(Integer)
+    asset: Mapped[Asset] = relationship(back_populates="vehicle")
+
+
+class Appliance(Base):
+    __tablename__ = "appliances"
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    asset_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("assets.id", ondelete="CASCADE"), unique=True, nullable=False)
+    appliance_type: Mapped[str] = mapped_column(String(40), nullable=False)
+    capacity: Mapped[str | None] = mapped_column(String(40))
+    energy_rating: Mapped[str | None] = mapped_column(String(20))
+    estimated_kwh_year: Mapped[Decimal | None] = mapped_column(Numeric(12, 3))
+    usage_hours_day: Mapped[Decimal | None] = mapped_column(Numeric(8, 3))
+    asset: Mapped[Asset] = relationship(back_populates="appliance")
+
+
+class FootprintSession(Base):
+    __tablename__ = "footprint_sessions"
+    __table_args__ = (CheckConstraint("period_end >= period_start", name="ck_footprint_period_range"),)
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    profile_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("profiles.id", ondelete="CASCADE"), nullable=False, index=True)
+    calculation_version: Mapped[str] = mapped_column(String(40), nullable=False)
+    factor_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    period_start: Mapped[date] = mapped_column(Date, nullable=False)
+    period_end: Mapped[date] = mapped_column(Date, nullable=False)
+    total_co2e: Mapped[Decimal] = mapped_column(Numeric(24, 6), nullable=False)
+    unit: Mapped[str] = mapped_column(String(16), default="kgCO2e", nullable=False)
+    measurement_type: Mapped[str] = mapped_column(String(8), default="CO2E", nullable=False)
+    period_kind: Mapped[str] = mapped_column(String(24), default="YTD_ACTUAL", nullable=False)
+    totals_by_gas: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    data_quality_score: Mapped[Decimal | None] = mapped_column(Numeric(5, 2))
+    status: Mapped[str] = mapped_column(String(16), default="COMPLETE", nullable=False)
+    data_quality_breakdown: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    missing_factors: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
+    profile: Mapped[Profile] = relationship(back_populates="footprint_sessions")
+    results: Mapped[list["FootprintResult"]] = relationship(back_populates="session", cascade="all, delete-orphan")
+
+
+class FootprintResult(Base):
+    __tablename__ = "footprint_results"
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    session_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("footprint_sessions.id", ondelete="CASCADE"), nullable=False, index=True)
+    category: Mapped[str] = mapped_column(String(40), nullable=False)
+    co2e: Mapped[Decimal] = mapped_column(Numeric(24, 6), nullable=False)
+    measurement_type: Mapped[str] = mapped_column(String(8), default="CO2E", nullable=False)
+    percentage: Mapped[Decimal] = mapped_column(Numeric(7, 4), nullable=False)
+    calculation_details: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    session: Mapped[FootprintSession] = relationship(back_populates="results")

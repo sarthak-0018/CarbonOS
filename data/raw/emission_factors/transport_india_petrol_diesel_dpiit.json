@@ -1,0 +1,32 @@
+[
+  {
+    "category": "transport",
+    "activity_type": "fuel_petrol_litre",
+    "geography": "India",
+    "unit": "litre",
+    "factor": 2.27,
+    "factor_unit": "kgCO2/litre",
+    "gas": "CO2",
+    "source": "Department for Promotion of Industry and Internal Trade, Government of India",
+    "source_url": "https://www.dpiit.gov.in/static/uploads/2025/07/4e218c186c4bdbc202d9f1f62bb9b372.pdf",
+    "source_year": 2015,
+    "source_version": "India Specific Road Transport Emission Factors for Stakeholder Consultation, 2015",
+    "methodology": "Gasoline combustion factor of 2.27 kgCO2/litre reported in the Government of India DPIIT-hosted City Logistics Plan guidance, citing India Specific Road Transport Emission Factors for Stakeholder Consultation (2015). Fuel consumed is calculated from user-entered distance and vehicle efficiency.",
+    "status": "APPROVED"
+  },
+  {
+    "category": "transport",
+    "activity_type": "fuel_diesel_litre",
+    "geography": "India",
+    "unit": "litre",
+    "factor": 2.64,
+    "factor_unit": "kgCO2/litre",
+    "gas": "CO2",
+    "source": "Department for Promotion of Industry and Internal Trade, Government of India",
+    "source_url": "https://www.dpiit.gov.in/static/uploads/2025/07/4e218c186c4bdbc202d9f1f62bb9b372.pdf",
+    "source_year": 2015,
+    "source_version": "India Specific Road Transport Emission Factors for Stakeholder Consultation, 2015",
+    "methodology": "Diesel combustion factor of 2.64 kgCO2/litre reported in the Government of India DPIIT-hosted City Logistics Plan guidance, citing India Specific Road Transport Emission Factors for Stakeholder Consultation (2015). Fuel consumed is calculated from user-entered distance and vehicle efficiency.",
+    "status": "APPROVED"
+  }
+]

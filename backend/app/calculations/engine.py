@@ -4,7 +4,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from app.calculations.contracts import CalculationInput, CalculationResult
 
-METHODOLOGY_VERSION = "carbonos-deterministic-v1"
+METHODOLOGY_VERSION = "carbonos-deterministic-v2"
 RESULT_QUANTUM = Decimal("0.000001")
 
 

@@ -1,6 +1,6 @@
 const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
-async function request(path, options = {}) {
+export async function request(path, options = {}) {
   const response = await fetch(`${baseUrl}${path}`, {
     ...options,
     headers: { 'Content-Type': 'application/json', ...options.headers },
@@ -26,8 +26,8 @@ export async function saveOnboarding({ selections }) {
     household === '5 or more' && { key: 'household_size_range', value: household },
   ].filter(Boolean).map(fact => ({ ...fact, source: 'ONBOARDING', confidence: 1, confirmed: true }));
   const assets = [
-    ...[selections[3]].filter(value => value && value !== 'I don’t own one').map(name => ({ asset_type: 'VEHICLE', name, source: 'ONBOARDING', confidence: 1 })),
-    ...[selections[4]].filter(value => value && value !== 'I’ll add this later').map(name => ({ asset_type: 'APPLIANCE', name, source: 'ONBOARDING', confidence: 1 })),
+    ...(Array.isArray(selections[3]) ? selections[3] : [selections[3]]).filter(value => value && value !== 'I don’t own one').map(name => ({ asset_type: 'VEHICLE', name, source: 'ONBOARDING', confidence: 1 })),
+    ...(Array.isArray(selections[4]) ? selections[4] : [selections[4]]).filter(value => value && value !== 'I’ll add this later').map(name => ({ asset_type: 'APPLIANCE', name, source: 'ONBOARDING', confidence: 1 })),
   ];
   const profile = await request('/api/profiles/onboarding', {
     method: 'POST',
@@ -57,12 +57,30 @@ export async function getPersistedActivities(profileId) {
   return request(`/api/profiles/${profileId}/activities`);
 }
 
+export async function updatePersistedProfile(profileId, changes) {
+  return request(`/api/profiles/${profileId}`, { method: 'PATCH', body: JSON.stringify(changes) });
+}
+
+export async function updatePersistedAsset(profileId, assetId, changes) {
+  return request(`/api/profiles/${profileId}/assets/${assetId}`, { method: 'PATCH', body: JSON.stringify(changes) });
+}
+
+export async function createPersistedAsset(profileId, asset) {
+  return request(`/api/profiles/${profileId}/assets`, { method: 'POST', body: JSON.stringify(asset) });
+}
+
+export async function retirePersistedAsset(profileId, assetId) {
+  return request(`/api/profiles/${profileId}/assets/${assetId}/retire`, { method: 'POST' });
+}
+
 export async function createPersistedActivity(profileId, activity) {
   return request(`/api/profiles/${profileId}/activities`, { method: 'POST', body: JSON.stringify(activity) });
 }
 
-// Dashboard calculations remain sample data until sourced factors are available.
-export const carbonService = {
-  async getDashboard() { return import('./mockData.js').then(({ footprint, activity }) => ({ footprint, activity })); },
-  async getProfile() { return import('./mockData.js').then(({ profile }) => profile); },
-};
+export async function updatePersistedActivity(profileId, activityId, activity) {
+  return request(`/api/profiles/${profileId}/activities/${activityId}`, { method: 'PATCH', body: JSON.stringify(activity) });
+}
+
+export async function deletePersistedActivity(profileId, activityId) {
+  return request(`/api/profiles/${profileId}/activities/${activityId}`, { method: 'DELETE' });
+}

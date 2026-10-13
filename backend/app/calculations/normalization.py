@@ -12,9 +12,12 @@ def normalize_activity_key(value: str) -> str:
 
 _UNIT_ALIASES = {
     "kwh": "kWh", "kilowatt_hour": "kWh", "kilowatt_hours": "kWh", "unit": "kWh", "units": "kWh",
+    "wh": "Wh", "watt_hour": "Wh", "watt_hours": "Wh",
     "km": "km", "kilometer": "km", "kilometers": "km", "kilometre": "km", "kilometres": "km",
+    "mile": "mile", "miles": "mile",
     "kg": "kg", "kilogram": "kg", "kilograms": "kg",
     "l": "litre", "liter": "litre", "liters": "litre", "litre": "litre", "litres": "litre",
+    "gallon": "gallon_us", "gallons": "gallon_us", "gallon_us": "gallon_us",
     "passenger_km": "passenger_km", "passenger-km": "passenger_km",
 }
 

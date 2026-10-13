@@ -8,6 +8,7 @@ from app.api.dependencies import get_session
 from app.schemas.domain import (
     ActivityCreate, ActivityRead, ActivityUpdate, AssetCreate, AssetEventRead, AssetRead, AssetUpdate,
     CalculationRead, FactCreate, FactRead, FactUpdate, FactorRead, OnboardingProfileCreate, ProfileCreate, ProfileRead, ProfileUpdate,
+    FootprintCalculateRequest, FootprintSessionRead,
 )
 from app.services.domain import DomainService, FactorUnavailableError, NotFoundError
 
@@ -126,7 +127,7 @@ def calculate_activity(profile_id: UUID, activity_id: UUID, db: Db):
     except NotFoundError as exc:
         raise HTTPException(status_code=404, detail={"code": "RESOURCE_NOT_FOUND", "message": str(exc)}) from exc
     except FactorUnavailableError as exc:
-        raise HTTPException(status_code=409, detail={"code": "EMISSION_FACTOR_UNAVAILABLE", "message": str(exc), "factor_key": exc.factor_key, "factor_status": exc.factor_status}) from exc
+        raise HTTPException(status_code=409, detail={"code": "CALCULATION_FACTOR_UNAVAILABLE", "message": str(exc), "factor_key": exc.factor_key, "factor_status": exc.factor_status}) from exc
     return CalculationRead.model_validate({
         **record.__dict__, "factor_key": factor.factor_key, "factor_version": factor.version,
     })
@@ -144,3 +145,44 @@ def calculation_history(profile_id: UUID, activity_id: UUID, db: Db):
             **record.__dict__, "factor_key": factor.factor_key, "factor_version": factor.version,
         }))
     return output
+
+
+@router.post("/profiles/{profile_id}/footprint/calculate", response_model=FootprintSessionRead, status_code=201)
+def calculate_footprint(profile_id: UUID, payload: FootprintCalculateRequest, db: Db):
+    try:
+        return service(db).calculate_footprint(profile_id, payload)
+    except NotFoundError as exc:
+        raise HTTPException(status_code=404, detail={"code": "RESOURCE_NOT_FOUND", "message": str(exc)}) from exc
+    except FactorUnavailableError as exc:
+        raise HTTPException(status_code=409, detail={"code": "CALCULATION_FACTOR_UNAVAILABLE", "message": str(exc), "factor_key": exc.factor_key, "factor_status": exc.factor_status}) from exc
+
+
+@router.get("/profiles/{profile_id}/footprint/history", response_model=list[FootprintSessionRead])
+def footprint_history(profile_id: UUID, db: Db, limit: int = Query(default=50, ge=1, le=200)):
+    try:
+        return service(db).list_footprint_history(profile_id, limit)
+    except NotFoundError as exc:
+        raise HTTPException(status_code=404, detail={"code": "RESOURCE_NOT_FOUND", "message": str(exc)}) from exc
+
+
+@router.post("/footprint/calculate", response_model=FootprintSessionRead, status_code=201)
+def calculate_footprint_for_profile(profile_id: UUID, payload: FootprintCalculateRequest, db: Db):
+    return calculate_footprint(profile_id, payload, db)
+
+
+@router.get("/footprint/history", response_model=list[FootprintSessionRead])
+def footprint_history_for_profile(profile_id: UUID, db: Db, limit: int = Query(default=50, ge=1, le=200)):
+    return footprint_history(profile_id, db, limit)
+
+
+@router.get("/profiles/{profile_id}/footprint/latest", response_model=FootprintSessionRead)
+def latest_footprint(profile_id: UUID, db: Db):
+    rows = service(db).list_footprint_history(profile_id, 1)
+    if not rows:
+        raise HTTPException(status_code=404, detail={"code": "FOOTPRINT_NOT_FOUND", "message": "No footprint calculation exists yet"})
+    return rows[0]
+
+
+@router.get("/footprint/latest", response_model=FootprintSessionRead)
+def latest_footprint_for_profile(profile_id: UUID, db: Db):
+    return latest_footprint(profile_id, db)

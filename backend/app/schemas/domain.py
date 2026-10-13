@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import Any, Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validator
 
 from app.calculations.normalization import normalize_activity_key, normalize_unit
 
@@ -19,7 +19,9 @@ class ProfileCreate(BaseModel):
     display_name: str = Field(default="", max_length=120)
     country_code: str = Field(default="IN", min_length=2, max_length=2)
     city: str | None = Field(default=None, max_length=120)
+    state: str | None = Field(default=None, max_length=120)
     household_size: int | None = Field(default=None, gt=0)
+    diet_type: str | None = Field(default=None, max_length=40)
     preferences: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("country_code")
@@ -32,7 +34,9 @@ class ProfileUpdate(BaseModel):
     display_name: str | None = Field(default=None, max_length=120)
     country_code: str | None = Field(default=None, min_length=2, max_length=2)
     city: str | None = Field(default=None, max_length=120)
+    state: str | None = Field(default=None, max_length=120)
     household_size: int | None = Field(default=None, gt=0)
+    diet_type: str | None = Field(default=None, max_length=40)
     preferences: dict[str, Any] | None = None
 
     @field_validator("country_code")
@@ -55,7 +59,9 @@ class ProfileRead(ORMModel):
     display_name: str
     country_code: str
     city: str | None
+    state: str | None
     household_size: int | None
+    diet_type: str | None
     preferences: dict[str, Any]
     created_at: datetime
     updated_at: datetime
@@ -250,6 +256,19 @@ class FactorRead(ORMModel):
     valid_from: date | None
     valid_to: date | None
     methodology_note: str | None
+    activity_type: str | None = None
+    geography: str | None = None
+    unit: str | None = None
+    factor: Decimal | None = None
+    factor_unit: str | None = None
+    source: str | None = None
+    source_year: int | None = None
+    gas: str = "CO2E"
+    reference_period_start: date | None = None
+    reference_period_end: date | None = None
+    methodology: str | None = None
+    uncertainty: Decimal | None = None
+    updated_at: datetime | None = None
 
 
 class CalculationRead(ORMModel):
@@ -264,3 +283,63 @@ class CalculationRead(ORMModel):
     calculated_at: datetime
     factor_key: str
     factor_version: int
+    gas: str = "CO2E"
+
+
+class FootprintCalculateRequest(BaseModel):
+    period_start: date
+    period_end: date
+    @field_validator("period_end")
+    @classmethod
+    def valid_period(cls, value, info):
+        start = info.data.get("period_start")
+        if start and value < start:
+            raise ValueError("period_end must be on or after period_start")
+        return value
+
+
+class FootprintResultRead(ORMModel):
+    id: UUID
+    category: str
+    co2e: Decimal
+    percentage: Decimal
+    calculation_details: dict[str, Any]
+    measurement_type: str = "CO2E"
+
+    @computed_field
+    @property
+    def value(self) -> Decimal:
+        return self.co2e
+
+    @computed_field
+    @property
+    def unit(self) -> str:
+        return f"kg{self.measurement_type}"
+
+
+class FootprintSessionRead(ORMModel):
+    id: UUID
+    calculation_version: str
+    factor_version: str
+    period_start: date
+    period_end: date
+    total_co2e: Decimal
+    unit: str
+    measurement_type: str = "CO2E"
+    period_kind: str = "YTD_ACTUAL"
+    totals_by_gas: dict[str, Decimal] = Field(default_factory=dict)
+    data_quality_score: Decimal | None
+    status: str = "COMPLETE"
+    data_quality_breakdown: dict[str, Any] = Field(default_factory=dict)
+    missing_factors: list[dict[str, Any]] = Field(default_factory=list)
+    created_at: datetime
+    results: list[FootprintResultRead]
+
+    @computed_field
+    @property
+    def total(self) -> dict[str, Any]:
+        if self.status == "UNAVAILABLE":
+            return {"value": None, "unit": self.unit, "measurement_type": self.measurement_type}
+        if self.measurement_type == "MIXED":
+            return {"value": None, "unit": "mixed", "by_gas": self.totals_by_gas}
+        return {"value": self.total_co2e, "unit": self.unit, "measurement_type": self.measurement_type}
