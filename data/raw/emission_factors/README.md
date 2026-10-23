@@ -1,8 +1,10 @@
-# Reviewed factor input
+# Food factor source
 
-Place reviewed JSON records here for the importer. Each record must include `category`, `activity_type`, `geography`, `unit`, numeric `factor`, `factor_unit`, `source`, `source_url`, `source_year`, `source_version`, `methodology`, `valid_from`, and `source_license`. `status` may be REVIEW or APPROVED; incomplete or conflicting records are rejected. No factor file is seeded because no authoritative factor has yet been verified.
+`ghg-per-kg-poore.csv` is the OWID full grapher CSV downloaded on 2026-10-13 from https://ourworldindata.org/grapher/ghg-per-kg-poore.csv?v=1&csvType=full&useColumnShortNames=false. It contains 37 food-category entities with 2010 study reference values based on Poore & Nemecek (2018). OWID chart/data attribution is CC BY; retain attribution to Our World in Data and the original providers. These global average category factors are not product- or India-specific. The SHA-256 checksum is recorded in each imported factor row.
 
-Example shape (documentation only; values below are intentionally absent):
+## Reviewed factor input format for other sources
+
+Place reviewed JSON records here for the existing factor importer. Each record must include `category`, `activity_type`, `geography`, `unit`, numeric `factor`, `factor_unit`, `source`, `source_url`, `source_year`, `source_version`, `methodology`, `valid_from`, and `source_license`. `status` may be REVIEW or APPROVED; incomplete or conflicting records are rejected. The JSON example below is documentation only; its values are intentionally absent.
 
 ```json
 {
@@ -24,5 +26,3 @@ Example shape (documentation only; values below are intentionally absent):
   "status": "REVIEW"
 }
 ```
-
-Replace every placeholder only with reviewed source-backed data. This template is intentionally invalid until provenance and a verified numeric factor are supplied.

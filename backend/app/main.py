@@ -3,10 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from app.api.routes.domain import router as domain_router
+from app.api.routes.receipts import router as receipts_router
 
 app = FastAPI(title="CarbonOS API", version="0.1.0", description="India-first personal carbon intelligence foundation")
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 app.include_router(domain_router)
+app.include_router(receipts_router)
 
 
 @app.exception_handler(HTTPException)

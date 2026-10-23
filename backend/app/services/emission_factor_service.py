@@ -8,11 +8,20 @@ from app.services.factors import FactorCatalogService
 
 class EmissionFactorService(FactorCatalogService):
     def find_approved(self, key: str, geography: str, effective_on: date) -> EmissionFactor | None:
-        rows = list(self.session.scalars(select(EmissionFactor).where(
+        query = select(EmissionFactor).where(
             EmissionFactor.factor_key == key, EmissionFactor.geography_code == geography.upper(),
             EmissionFactor.status.in_(("VERIFIED", "APPROVED")), EmissionFactor.value_kg_co2e_per_unit.is_not(None),
             or_(EmissionFactor.valid_from.is_(None), EmissionFactor.valid_from <= effective_on),
-            (EmissionFactor.valid_to.is_(None) | (EmissionFactor.valid_to >= effective_on)))))
+            (EmissionFactor.valid_to.is_(None) | (EmissionFactor.valid_to >= effective_on)))
+        rows = list(self.session.scalars(query))
+        # OWID food factors are explicitly global proxies. Keep this fallback scoped
+        # to imported food activity keys; electricity and transport remain unchanged.
+        if not rows and key.startswith("food_") and geography.upper() != "GLOBAL":
+            rows = list(self.session.scalars(select(EmissionFactor).where(
+                EmissionFactor.factor_key == key, EmissionFactor.geography_code == "GLOBAL",
+                EmissionFactor.status.in_(("VERIFIED", "APPROVED")), EmissionFactor.value_kg_co2e_per_unit.is_not(None),
+                or_(EmissionFactor.valid_from.is_(None), EmissionFactor.valid_from <= effective_on),
+                (EmissionFactor.valid_to.is_(None) | (EmissionFactor.valid_to >= effective_on)))))
         if len(rows) > 1:
             raise ValueError("More than one approved factor matches this date and geography")
         return rows[0] if rows else None

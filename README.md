@@ -16,6 +16,8 @@ The current API supports profile onboarding and updates, profile facts, multiple
 
 Calculation uses deterministic decimal arithmetic and APPROVED factors selected from PostgreSQL. Recurring quantities are normalized to annual activity; one-time quantities remain one-time. The CEA electricity factor is 0.675 kgCO2/kWh and petrol/diesel factors are sourced; unsupported categories remain unavailable. Gas type is preserved, so CO2 is never represented as CO2e. Historical sessions retain factor values, source references, activity inputs, factor versions, gas totals, and calculation version.
 
+The Grocery Scanner at `/receipts` accepts receipt photos, processes OCR locally with PaddleOCR, and persists reviewable receipt items. Run migrations, then import the pinned food-category factors with `python scripts/data/import_food_emission_factors.py` in the API environment. See [grocery receipt scanning](docs/features/grocery-receipt-scanning.md) and [food emissions](docs/methodology/food-emissions.md) for supported inputs and limitations. Grocery factors are global category averages; receipt rows require user review before confirmation.
+
 ## Current boundaries
 
 The dashboard fetches the saved latest snapshot and recalculates to include recent edits. Food, flights, public transport, LPG, and CNG remain unavailable pending suitable factors. Authentication/user isolation and admin factor-management endpoints are not implemented. Keep the API on a trusted local network until authentication is added. Factor import and provenance are described in [emission factors](docs/methodology/emission-factors.md); methodology and assumptions are in [calculation methodology](docs/methodology/calculation-methodology.md) and [assumptions](docs/methodology/assumptions.md).

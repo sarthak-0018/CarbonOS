@@ -16,8 +16,19 @@ services:
     build: ./backend
     environment:
       DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env}
+      RECEIPT_STORAGE_DIR: /uploads/receipts
+      PADDLE_HOME: /models/paddle
+      PADDLE_PDX_CACHE_HOME: /models/paddle
+      OCR_LANGUAGE: ${OCR_LANGUAGE:-en}
     ports: ["8000:8000"]
     depends_on:
       db: { condition: service_healthy }
+    volumes:
+      - receipt_uploads:/uploads/receipts
+      - paddle_models:/models/paddle
+      - ./scripts:/app/scripts:ro
+      - ./data:/app/data:ro
 volumes:
   postgres_data:
+  receipt_uploads:
+  paddle_models:

@@ -1,0 +1,9 @@
+{
+  "rice": ["rice", "chawal", "चावल", "तांदूळ"],
+  "wheat": ["wheat", "गेहूं", "गहू"],
+  "milk": ["milk", "दूध"],
+  "potato": ["potato", "potatoes", "aloo", "आलू", "बटाटा", "बटाटे"],
+  "onion": ["onion", "onions", "pyaaz", "प्याज", "कांदा"],
+  "tomato": ["tomato", "tomatoes", "टमाटर", "टोमॅटो"],
+  "pulses": ["dal", "daal", "दाल", "डाळ"]
+}

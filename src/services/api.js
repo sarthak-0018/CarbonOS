@@ -1,13 +1,48 @@
 const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 export async function request(path, options = {}) {
-  const response = await fetch(`${baseUrl}${path}`, {
-    ...options,
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-  });
+  const isForm = options.body instanceof FormData;
+  let response;
+  try {
+    response = await fetch(`${baseUrl}${path}`, {
+      ...options,
+      headers: { ...(isForm ? {} : { 'Content-Type': 'application/json' }), ...options.headers },
+    });
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(`Cannot reach the CarbonOS API at ${baseUrl}. Start PostgreSQL and the API with “docker compose up --build”, then retry.`);
+    }
+    throw error;
+  }
   const body = response.status === 204 ? null : await response.json();
   if (!response.ok) throw new Error(body?.error?.message || body?.detail?.message || 'CarbonOS service is unavailable');
   return body;
+}
+
+export async function scanReceipt(profileId, file) {
+  const form = new FormData(); form.append('profile_id', profileId); form.append('image', file);
+  return request('/api/receipts/scan', { method: 'POST', body: form });
+}
+export async function getReceiptCategories() { return request('/api/receipts/categories'); }
+export async function updateReceiptItem(receiptId, itemId, profileId, changes) {
+  return request(`/api/receipts/${receiptId}/items/${itemId}?profile_id=${profileId}`, { method: 'PATCH', body: JSON.stringify(changes) });
+}
+export async function confirmReceipt(receiptId, profileId) {
+  return request(`/api/receipts/${receiptId}/confirm?profile_id=${profileId}`, { method: 'POST' });
+}
+export async function getReceipts(profileId) { return request(`/api/receipts?profile_id=${profileId}`); }
+export async function getReceipt(receiptId, profileId) { return request(`/api/receipts/${receiptId}?profile_id=${profileId}`); }
+export async function updateReceipt(receiptId, profileId, changes) {
+  return request(`/api/receipts/${receiptId}?profile_id=${profileId}`, { method: 'PATCH', body: JSON.stringify(changes) });
+}
+export async function retryReceipt(receiptId, profileId) {
+  return request(`/api/receipts/${receiptId}/process?profile_id=${profileId}`, { method: 'POST' });
+}
+export async function addReceiptItem(receiptId, profileId, item) {
+  return request(`/api/receipts/${receiptId}/items?profile_id=${profileId}`, { method: 'POST', body: JSON.stringify(item) });
+}
+export async function removeReceiptItem(receiptId, itemId, profileId) {
+  return request(`/api/receipts/${receiptId}/items/${itemId}?profile_id=${profileId}`, { method: 'DELETE' });
 }
 
 export async function getHealth() {
