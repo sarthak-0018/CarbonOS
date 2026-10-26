@@ -31,14 +31,27 @@ def validate_image(data: bytes, content_type: str | None):
     except Exception as exc: raise ValueError("INVALID_IMAGE") from exc
 
 def preprocess_image(image):
-    """Apply conservative contrast and size adjustments without losing fine print."""
-    from PIL import ImageOps
+    """Normalize low-quality receipt photos while retaining fine print and geometry."""
+    from PIL import Image, ImageOps, ImageEnhance, ImageFilter
     image=ImageOps.autocontrast(image.convert("RGB"),cutoff=0.5)
     max_edge=2600
     if max(image.size)>max_edge:
         scale=max_edge/max(image.size)
         image=image.resize((max(1,round(image.width*scale)),max(1,round(image.height*scale))))
-    return image
+    # Mild sharpening helps thermal and motion-soft text without hard thresholding
+    # characters or erasing faint decimal points.
+    image=ImageEnhance.Contrast(image).enhance(1.12).filter(ImageFilter.UnsharpMask(radius=1.2,percent=115,threshold=3))
+    try:
+        import cv2
+        import numpy as np
+        rgb=np.asarray(image)
+        lab=cv2.cvtColor(rgb,cv2.COLOR_RGB2LAB)
+        light, a, b=cv2.split(lab)
+        light=cv2.createCLAHE(clipLimit=1.8,tileGridSize=(8,8)).apply(light)
+        improved=cv2.cvtColor(cv2.merge((light,a,b)),cv2.COLOR_LAB2RGB)
+        return Image.fromarray(improved)
+    except ImportError:
+        return image
 
 TOTAL = re.compile(r"\b(sub.?total|grand total|total|gst|cgst|sgst|igst|tax|discount|cash|card|change|payment|round.?off|savings|loyalty|hsn)\b", re.I)
 QTY = re.compile(r"(?P<qty>\d+(?:[.,]\d+)?)\s*(?P<unit>kilograms?|kgs?|kg|grams?|gms?|gm|g|litres?|liters?|ltr|l|millilitres?|milliliters?|ml|pieces?|pcs?|pc|packets?|pkt|packs?|pouches?|bottles?|boxes?|tins?|bags?|bunches|dozen)\b", re.I)

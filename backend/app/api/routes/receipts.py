@@ -15,10 +15,41 @@ from app.receipts import validate_image, preprocess_image, parse_receipt, calcul
 from app.ocr.base import OCRLine
 from app.ocr.ocr_service import get_ocr_provider
 from app.services.grocery_normalization import match_product
+from app.services.ollama_receipt_extractor import extract_items, ollama_health
 
 router=APIRouter(prefix="/api/receipts", tags=["grocery receipts"])
 Db=Annotated[Session,Depends(get_session)]
 provider=get_ocr_provider()
+
+def extracted_rows(lines):
+    """Map schema-validated Qwen rows onto the existing persisted receipt model."""
+    extraction=extract_items(lines)
+    from app.services.receipt_table_parser import extract_package_size
+    rows=[]
+    for item in extraction.items:
+        if any(index < 0 or index >= len(lines) for index in item.source_line_numbers):
+            raise ValueError("EXTRACTION_SOURCE_INVALID")
+        evidence=[lines[i] for i in item.source_line_numbers if 0 <= i < len(lines)]
+        if not evidence: raise ValueError("EXTRACTION_SOURCE_MISSING")
+        raw=" ".join(line.text.strip() for line in evidence)
+        name,size,size_unit=extract_package_size(item.item_name)
+        matched=match_product(name)
+        price=item.price
+        rows.append({"raw_text":raw,"name":name,"normalized_name":matched["normalized_name"],
+            "quantity":item.quantity,"unit":item.unit,"unit_inferred":False,
+            "package_size":size,"package_size_unit":size_unit,"mrp":None,
+            "price_column_value":price,"price_column_semantics":"UNIT_PRICE" if price is not None else "UNKNOWN",
+            "metadata":{"extraction_method":"ollama-qwen3","total_price":str(item.total_price) if item.total_price is not None else None,
+                        "source_line_numbers":item.source_line_numbers,"warnings":[] if price is not None else ["Selling price not identifiable"]},
+            "unit_price":price,"line_total":item.total_price,"category":matched["category"],
+            "match_method":matched["method"],"match_confidence":matched["confidence"],
+            "confidence":min((line.confidence for line in evidence if line.confidence is not None),default=None),
+            "parsing_confidence":None,"warnings":[]})
+    return rows
+
+@router.get("/ollama-health")
+def ollama_status():
+    return ollama_health()
 
 @router.get("/categories")
 def categories(db: Db):
@@ -94,7 +125,13 @@ async def scan(request: Request, db: Db):
     finally:
         if "tmp_path" in locals(): Path(tmp_path).unlink(missing_ok=True)
     lines=[OCRLine(redact_sensitive_text(line.text),line.confidence,line.box) for line in lines]
-    parsed_result=parse_receipt(lines); raw=parsed_result["raw_ocr_text"]; parsed=parsed_result["items"]; header=parsed_result["header"]
+    try:
+        parsed_result=parse_receipt(lines); parsed=extracted_rows(lines)
+    except Exception as exc:
+        reason=str(exc) if str(exc).startswith(("OLLAMA_", "OCR_", "EXTRACTION_")) else "EXTRACTION_INVALID"
+        receipt.ocr_status="FAILED"; receipt.processing_error=f"Local extraction failed ({reason})."; db.commit()
+        raise HTTPException(503,detail={"code":"EXTRACTION_FAILED","message":f"The receipt was retained, but local item extraction failed ({reason}). Check Ollama and retry."}) from exc
+    raw=parsed_result["raw_ocr_text"]; header=parsed_result["header"]
     receipt.raw_ocr_text=raw; receipt.ocr_data=[{"text":line.text,"confidence":line.confidence,"box":line.box} for line in lines]; receipt.ocr_engine=provider.version; receipt.ocr_status="REVIEW_REQUIRED"; receipt.processing_error=" | ".join(header["warnings"]+([header["reconciliation_warning"]] if header["reconciliation_warning"] else [])) or None
     receipt.merchant_name=header["store_name"]; receipt.store_address=header["store_address"]; receipt.receipt_date=header["purchase_date"]; receipt.invoice_number=header["invoice_number"]; receipt.gstin=header["gstin"]; receipt.subtotal=header["subtotal"]; receipt.discount_total=header["discount_total"]; receipt.tax_total=header["tax_total"]; receipt.total_amount=header["total_amount"]; receipt.currency=header["currency"] or "INR"
     for index,row in enumerate(parsed):
@@ -206,18 +243,19 @@ def retry_processing(receipt_id: UUID,profile_id: UUID,db: Db):
         _, normalized=validate_image(target.read_bytes(),None)
         with tempfile.NamedTemporaryFile(suffix=".jpg",delete=False) as tmp:
             preprocess_image(normalized).save(tmp,format="JPEG",quality=94); tmp_path=tmp.name
-        rows=provider.recognize(tmp_path); rows=[OCRLine(redact_sensitive_text(line.text),line.confidence,line.box) for line in rows]; result=parse_receipt(rows)
+        rows=provider.recognize(tmp_path); rows=[OCRLine(redact_sensitive_text(line.text),line.confidence,line.box) for line in rows]; result=parse_receipt(rows); extracted=extracted_rows(rows)
         receipt.raw_ocr_text=result["raw_ocr_text"]; receipt.ocr_data=[{"text":line.text,"confidence":line.confidence,"box":line.box} for line in rows]; receipt.ocr_engine=provider.version; receipt.ocr_status="REVIEW_REQUIRED"
         header=result["header"]
         receipt.merchant_name=header["store_name"]; receipt.receipt_date=header["purchase_date"]; receipt.invoice_number=header["invoice_number"]; receipt.gstin=header["gstin"]; receipt.subtotal=header["subtotal"]; receipt.discount_total=header["discount_total"]; receipt.tax_total=header["tax_total"]; receipt.total_amount=header["total_amount"]; receipt.currency=header["currency"]
         receipt.items.clear()
-        for index,row in enumerate(result["items"]):
+        for index,row in enumerate(extracted):
             receipt.items.append(ReceiptItem(line_index=index,raw_text=row["raw_text"],raw_product_name=row["name"],normalized_product_name=row["normalized_name"],quantity=row["quantity"],quantity_unit=row["unit"],quantity_unit_inferred=row["unit_inferred"],package_size=row["package_size"],package_size_unit=row["package_size_unit"],mrp=row["mrp"],price_column_value=row["price_column_value"],price_column_semantics=row["price_column_semantics"],source_metadata=row["metadata"],unit_price=row["unit_price"],line_total=row["line_total"],food_category=row["category"],match_method=row["match_method"],match_confidence=row["match_confidence"],ocr_confidence=row["confidence"],parse_confidence=row["parsing_confidence"],quantity_evidence="INFERRED" if row["unit_inferred"] else "OCR",emissions_status="NEEDS_REVIEW",calculation_details={}))
         receipt.processing_error=" | ".join(header["warnings"]+([header["reconciliation_warning"]] if header["reconciliation_warning"] else [])) or None
         db.commit(); return output(owned(db,profile_id,receipt_id))
     except Exception as exc:
-        db.rollback(); receipt=owned(db,profile_id,receipt_id); receipt.ocr_status="FAILED"; receipt.processing_error="Local OCR retry failed. Check the configured model cache and OCR installation."; db.commit()
-        raise HTTPException(503,detail={"code":"OCR_FAILED","message":"Local OCR retry failed. The receipt remains available for another retry."}) from exc
+        reason=str(exc) if str(exc).startswith(("OLLAMA_", "OCR_", "EXTRACTION_")) else "EXTRACTION_INVALID"
+        db.rollback(); receipt=owned(db,profile_id,receipt_id); receipt.ocr_status="FAILED"; receipt.processing_error=f"Local receipt retry failed ({reason})."; db.commit()
+        raise HTTPException(503,detail={"code":"OCR_FAILED","message":f"Local receipt retry failed ({reason}). The receipt remains available for another retry."}) from exc
     finally:
         if tmp_path: Path(tmp_path).unlink(missing_ok=True)
 

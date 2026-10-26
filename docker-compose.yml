@@ -20,6 +20,10 @@ services:
       PADDLE_HOME: /models/paddle
       PADDLE_PDX_CACHE_HOME: /models/paddle
       OCR_LANGUAGE: ${OCR_LANGUAGE:-en}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3:8b}
+      OLLAMA_TIMEOUT_SECONDS: ${OLLAMA_TIMEOUT_SECONDS:-600}
+      DISABLE_MODEL_SOURCE_CHECK: ${DISABLE_MODEL_SOURCE_CHECK:-True}
     ports: ["8000:8000"]
     depends_on:
       db: { condition: service_healthy }

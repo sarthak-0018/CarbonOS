@@ -2,27 +2,40 @@
 
 The Grocery Scanner is available at `/receipts` after creating a CarbonOS profile. It accepts JPG/JPEG, PNG, and WebP images up to 10 MB. The API checks file signatures against MIME type and extension, decodes the image, applies EXIF orientation, rejects images above 25 megapixels, and stores the original under a generated UUID in controlled receipt storage. OCR input uses conservative autocontrast and downsizing; fine print is retained. The original can be viewed through the profile-scoped receipt preview endpoint.
 
-## OCR configuration
+## OCR and local extraction configuration
 
 PaddleOCR 3.3.2 with PaddlePaddle 3.2.2 CPU is the preferred local provider. Paddle model loading is lazy and reused for the process lifetime. The Docker image uses Python 3.12 and installs local Tesseract 5 English as a real local fallback. OCR failures are persisted as `FAILED`, and the image remains available for `POST /api/receipts/{id}/process` retry. PaddleX weights are cached in the configured model volume. No receipt content is sent to a cloud OCR service.
 
-`OCR_LANGUAGE` defaults to `en`; `hi` and `mr` select PaddleOCR's Devanagari recognition model. The PaddleOCR language table lists Hindi and Marathi support and the Devanagari model also includes English, but CarbonOS has not validated recognition quality against real Hindi or Marathi retail receipts. The Tesseract fallback is English-only. See the [PaddleOCR multilingual model documentation](https://www.paddleocr.ai/latest/en/version3.x/algorithm/PP-OCRv5/PP-OCRv5_multi_languages.html).
+The OCR engine retains text, coordinates, and confidence. Image preparation applies EXIF orientation, conservative contrast, sharpening, and OpenCV CLAHE; it avoids hard binarization that can erase faint decimal points. `OCR_LANGUAGE` defaults to `en`; `hi` and `mr` select PaddleOCR's Devanagari recognition model. Hindi/Marathi and English-only Tesseract fallback have not been validated against real receipts.
+
+Qwen 3 performs local, OCR-first item extraction. Configure `OLLAMA_BASE_URL` (default in Docker: `http://host.docker.internal:11434`), `OLLAMA_MODEL` (default `qwen3:8b`) and `OLLAMA_TIMEOUT_SECONDS` (600 seconds). The API sends only OCR text and its layout coordinates to Ollama, requests schema-constrained JSON with temperature 0 and Qwen3 thinking disabled for this constrained extraction, and independently validates every field and cited OCR line. The model is kept loaded for 10 minutes after a request. The service does not fall back to a cloud provider or invent a missing price. `GET /api/receipts/ollama-health` reports whether the configured model is reachable and the effective extraction timeout. On Windows/macOS Docker Desktop, run Ollama on the host; on Linux, adjust `OLLAMA_BASE_URL` to a host-reachable address and configure Docker networking accordingly.
+
+Example local setup (install Ollama separately from its official installer):
+
+```powershell
+ollama pull qwen3:8b
+ollama serve
+```
+
+Ensure `.env` has `OLLAMA_MODEL=qwen3:8b`, then rebuild/restart the API with `docker compose up --build`. The first PaddleOCR run downloads its recognition/detection weights into the persistent `paddle_models` volume. The Docker image installs pinned PaddleOCR 3.3.2 / PaddlePaddle 3.2.2 and OpenCV headless 4.10.0.84; first-run OCR needs network access to fetch model weights. Qwen 3 JSON mode is requested via Ollama's JSON Schema format; Pydantic validation remains authoritative.
 
 ## Extracted and reviewed data
 
-The deterministic parser preserves raw OCR text and line confidence, and extracts candidate store name, date, invoice number, GSTIN, INR currency, subtotal, discount, tax, total, and item rows. It recognizes common kg/g/l/ml/count and package terms, quantity/rate/amount layouts (including unboxed rows using the order of table headers), discounts, GST/CGST/SGST/IGST labels, and common Indian date formats. Numeric dates with day and month both at most 12 are flagged for review. Unknown values remain empty. Subtotal mismatch is a warning with a ₹1.00 tolerance; it never changes line amounts.
+The deterministic parser remains available for receipt-level totals and debugging, and recognizes common quantity/rate/amount layouts. Qwen 3 provides the persisted item rows using strict fields and source OCR line references. Selling price is the rate when identified; printed amount stays internal. Unknown prices/units remain null. A local model failure marks the receipt `FAILED` while retaining its image for retry.
 
 Product aliases are editable in `backend/app/data/product_aliases.json`. Exact aliases include selected English, Hindi, and Marathi names. A prefix alias match is accepted only when followed by a numeric size or unit; for example, rice flour remains distinct from rice. Unmatched products remain visible and require review. Product alias confidence is separate from OCR and parsing confidence. Package counts are not converted to mass, and price is never used as quantity. The UI allows correction of receipt totals, descriptions, quantities, units, package sizes, unit prices, line totals, and food category; users may add or remove rows.
 
-Records are stored in the existing PostgreSQL `receipts` and `receipt_items` tables. Migration `20261022_0009` adds receipt header, processing, checksum, package-size, and product-match confidence fields without deleting existing rows. Uploaded images are stored outside the public frontend directory. SHA-256 avoids repeated creation for an identical upload within the same profile. Processing states include `PROCESSING`, `REVIEW_REQUIRED`, `FAILED`, and `CONFIRMED`; OCR does not confirm a receipt.
+Records are stored in the existing PostgreSQL `receipts` and `receipt_items` tables. Migrations additively extend existing data. Uploaded images are stored outside the public frontend directory. SHA-256 avoids repeated creation for an identical upload within the same profile. Processing states include `PROCESSING`, `REVIEW_REQUIRED`, `FAILED`, and `CONFIRMED`.
 
-Use `docker compose up --build`, then apply the additive schema changes with `docker compose exec api alembic upgrade head`. API health is `GET /api/health`. Run backend checks with `docker compose exec api pytest`. To test manually, create a profile, open `/receipts`, upload a real printed grocery receipt, inspect it against the preview, correct at least one field, save corrections, confirm, then refresh and reopen the saved receipt from history. Synthetic parser fixtures are test data and do not demonstrate real-image OCR accuracy.
+Use `docker compose up --build`, then apply additive schema changes with `docker compose exec api alembic upgrade head`. Check `GET /api/health` and `GET /api/receipts/ollama-health`. Run backend checks with `docker compose exec api pytest`. Synthetic and mocked fixtures do not demonstrate real-image OCR accuracy.
 
 The existing calculation engine can produce a category-average estimate only after a supported mass quantity, selected food category, and approved factor are present. Imported global food factors are not India-specific product measurements. OCR output by itself is not a carbon footprint. Milestone 4 should connect confirmed products/categories and sufficient quantities to a reviewed factor registry, keep the factor's provenance and geography limitations visible, and calculate deterministically.
 
 ## Current limitations
 
 - No permitted real receipt image set is checked in, so real-image OCR has not been validated and no accuracy percentage is claimed.
+- The existing `/receipts` UI and workflow still require single-file upload and user review/confirmation; automatic batch acceptance and the evaluation dashboard are not implemented yet.
+- Qwen 3 extraction quality has not yet been measured against a labeled receipt set. Local Qwen 3 8B may require substantial RAM/VRAM and can be slow on CPU.
 - No robust Hindi/Marathi recognition evaluation has been performed.
 - Store-address extraction is not yet implemented; unsupported header fields remain blank.
 - The parser is deterministic and receipt-layout agnostic, but unusual column layouts may need user correction.
