@@ -6,6 +6,8 @@ For each activity, CarbonOS selects exactly one `APPROVED` factor matching activ
 
 Frequency normalization is ONE_TIME ×1, DAILY ×365, WEEKLY ×52, MONTHLY ×12, QUARTERLY ×4, YEARLY ×1. Recurring quantities are labeled annualized estimates. One-time quantities remain one-time and are restricted to the requested date window. Petrol/diesel vehicle emissions convert distance to litres with user-entered km/litre efficiency, then apply the saved fuel factor. Appliance estimates are not currently auto-summed.
 
+The Carbon Memory dashboard shows a monthly average for recurring activities by dividing their annualized emissions by 12. One-time activities are excluded from that average and shown separately for the selected dates. Gas values (CO₂e, CO₂, CH₄, N₂O) are presented separately; they are not added into a single total because CO₂e is an equivalent-gas measure while the other rows can be gas-specific measurements.
+
 ## Partial results
 
 Each activity with a missing factor is retained in the session's `missing_factors` response. Other activities with valid factors are calculated and saved. Sessions report `PARTIAL` for missing factors or CO2-only/mixed-gas results, and `UNAVAILABLE` if no category could be calculated. Mixed gas totals remain separate. An empty period is unavailable rather than a zero footprint.

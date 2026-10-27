@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, Check, CloudUpload, FileText, LoaderCircle, RotateCcw } from 'lucide-react';
 import {
   addReceiptItem, confirmReceipt, getReceipt, getReceiptCategories, getReceipts,
-  getSavedProfileId, removeReceiptItem, retryReceipt, scanReceipt,
+  getSavedProfileId, recalculateReceipt, removeReceiptItem, retryReceipt, scanReceipt,
   updateReceipt, updateReceiptItem,
 } from './services/api.js';
 
@@ -110,6 +110,14 @@ export default function GroceryScanner() {
     finally { setBusy(false); }
   }
 
+  async function recalculate() {
+    if (!receipt) return;
+    setBusy(true); setError('');
+    try { hydrate(await recalculateReceipt(receipt.id, profileId)); await refreshHistory(); }
+    catch (e) { setError(e.message); }
+    finally { setBusy(false); }
+  }
+
   async function retry() {
     setBusy(true); setError('');
     try { hydrate(await retryReceipt(receipt.id, profileId)); await refreshHistory(); }
@@ -129,9 +137,9 @@ export default function GroceryScanner() {
   const confirmed = receipt?.ocr_status === 'CONFIRMED';
   return <>
     <div className="page-title"><div>
-      <div className="eyebrow">GROCERY RECEIPT · REVIEW BEFORE SAVING</div>
+      <div className="eyebrow">GROCERY RECEIPT · AUTOMATIC FOOTPRINT ESTIMATE</div>
       <h1>Grocery Scanner</h1>
-      <p>Read a receipt locally, correct detected details, and save confirmed grocery records.</p>
+      <p>Read a receipt locally, see an immediate carbon estimate for supported items, and review each line against the photo.</p>
     </div></div>
 
     {!profileId ? <div className="card activity-empty"><b>Create a profile before scanning.</b><a className="button" href="/onboarding">Create profile <ArrowRight size={14}/></a></div> : <>
@@ -149,14 +157,23 @@ export default function GroceryScanner() {
         <button className="button upload-continue" disabled={!file || busy} onClick={scan}>
           {busy ? <><LoaderCircle size={15}/> Uploading and reading receipt locally…</> : <>Scan receipt <ArrowRight size={15}/></>}
         </button>
-        <p className="upload-footnote">OCR extracts receipt data only. Carbon estimates require a confirmed supported quantity and approved factor.</p>
+        <p className="upload-footnote">Eligible items are calculated automatically from supported quantities and approved factors. Unmatched products remain unestimated for review.</p>
       </section><aside className="upload-side"><span className="eyebrow">HOW IT WORKS</span><h3>OCR first, review before saving.</h3><p>Prices never become quantities. Pack counts and package size stay separate unless the receipt states both.</p></aside></div>}
 
       {receipt && <>
         <div className="card receipt-summary"><div><div className="eyebrow">{receipt.ocr_engine} · {receipt.ocr_status}</div>
           <h2>{confirmed ? 'Confirmed receipt' : 'Review detected items'}</h2>
-          <p>OCR confidence describes text recognition only. Receipt confirmation does not establish the scientific accuracy of a future carbon estimate.</p>
+          <p>Carbon figures are estimates. Each calculated line shows its measured quantity, factor, formula, and source; unsupported lines stay unestimated.</p>
         </div><div className="receipt-total">{receipt.total_amount != null ? `${receipt.currency || 'Currency not detected'} ${receipt.total_amount.toFixed(2)}` : 'Total not detected'}</div></div>
+
+        <section className="card carbon-summary" aria-label="Receipt carbon footprint summary">
+          <div><span>Estimated receipt footprint</span><strong>{receipt.summary?.calculated_items ? `${Number(receipt.summary.estimated_kg_co2e).toFixed(4)} kg CO₂e` : 'Not available'}</strong></div>
+          <div><span>Items with a supported estimate</span><strong>{receipt.summary?.calculated_items ?? 0} / {receipt.summary?.total_items ?? receipt.items.length}</strong></div>
+          <div><span>Coverage</span><strong>{receipt.calculation_status === 'COMPLETE' ? 'Complete' : receipt.calculation_status === 'PARTIAL' ? 'Partial' : 'No supported lines yet'}</strong></div>
+          <small>{categories.length ? `${categories.length} approved factors loaded. ` : 'No approved food factors are loaded. Import the food factor catalog, then recalculate. '}
+            Only recognized product categories and supported mass quantities contribute. Global category averages are proxies, not product specific or India specific measurements. Receipt prices are never used to calculate emissions.</small>
+          <button className="quiet-button" disabled={busy || !receipt.items.length} onClick={recalculate}>Recalculate footprint</button>
+        </section>
 
         {receipt.ocr_status === 'FAILED' && <div className="card activity-empty" role="alert"><b>Receipt reading failed.</b><span>{receipt.processing_error || 'Local OCR could not process this image.'}</span><button className="button" disabled={busy} onClick={retry}>Retry local OCR</button></div>}
         {receipt.ocr_status === 'REVIEW_REQUIRED' && !receipt.items.some(item => item.user_corrected) && <button className="quiet-button" disabled={busy} onClick={retry}>Re-run extraction with current model</button>}
@@ -184,6 +201,8 @@ export default function GroceryScanner() {
               <small className="receipt-raw">Receipt text: {item.raw_text || 'Manually added — enter the printed description.'} · OCR confidence {item.ocr_confidence == null ? 'not available' : `${Math.round(item.ocr_confidence * 100)}%`}</small>
               {item.total_content_quantity != null && <small className="receipt-raw">Total contents: {item.total_content_quantity} {item.total_content_unit} across {item.quantity} {item.unit}{Number(item.quantity) === 1 ? '' : 's'} ({item.package_size} {item.package_size_unit} each).</small>}
               <small className="receipt-raw">{item.match_method ? `Product match: ${item.match_method.replaceAll('_', ' ').toLowerCase()} · ${item.match_confidence == null ? 'confidence unavailable' : `${Math.round(item.match_confidence * 100)}%`}` : 'No automatic product match; select a category only when supported.'}</small>
+              {item.brand && <small className="receipt-raw">Recognized brand: {item.brand} · emissions use the generic product category, not a brand-specific factor.</small>}
+              {item.food_category && <small className="receipt-raw">Recognized product group: {item.food_category.replaceAll('_', ' ')}{item.emissions_status === 'FACTOR_UNAVAILABLE' ? ' · no approved emissions factor is available yet' : ''}</small>}
               <div className="receipt-fields">
                 <label>Product description<input aria-label={`Product description line ${index + 1}`} value={draft.product_name ?? ''} onChange={e => setItemField(item.id, 'product_name', e.target.value)}/></label>
                 <label>MRP (₹)<input type="number" min="0" step="0.01" value={draft.mrp ?? ''} onChange={e => setItemField(item.id, 'mrp', e.target.value)}/></label>
@@ -202,7 +221,12 @@ export default function GroceryScanner() {
               {item.warnings?.map((warning, warningIndex) => <small className="save-error" role="status" key={warningIndex}>{warning}</small>)}
               <button className="quiet-button" disabled={busy || confirmed} onClick={() => saveItem(item)}>Save row correction</button>
               {!confirmed && <button className="quiet-button" onClick={() => removeItem(item)}>Remove line</button>}
-              {item.emissions_kg_co2e != null && <div className="receipt-result"><b>{item.emissions_kg_co2e.toFixed(4)} kgCO₂e estimate</b><small>{item.calculation_details?.factor_source}: global category-average proxy; not India-specific.</small></div>}
+              {item.emissions_kg_co2e != null && <div className="receipt-result carbon-line-result"><b>{item.emissions_kg_co2e.toFixed(4)} kg CO₂e</b><div>
+                <small><b>Calculation:</b> {item.calculation_details?.formula}</small>
+                <small><b>Factor:</b> {item.calculation_details?.factor} kg CO₂e/kg · {item.calculation_details?.factor_source} ({item.calculation_details?.source_year ? `source ${item.calculation_details.source_year}` : 'source year not stated'}{item.calculation_details?.reference_period_start ? `; data ${String(item.calculation_details.reference_period_start).slice(0, 4)}` : ''})</small>
+                {item.calculation_details?.source_url && <small><a href={item.calculation_details.source_url} target="_blank" rel="noreferrer">Open factor source</a></small>}
+                <small>{item.calculation_details?.limitation}</small>
+              </div></div>}
               {item.emissions_status === 'FACTOR_UNAVAILABLE' && <div className="receipt-result">No approved emission factor is available for this category.</div>}
               {item.emissions_status === 'QUANTITY_UNAVAILABLE' && <div className="receipt-result">No supported mass quantity is available for an estimate.</div>}
             </article>;

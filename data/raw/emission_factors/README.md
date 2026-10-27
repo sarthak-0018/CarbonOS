@@ -1,6 +1,6 @@
 # Food factor source
 
-`ghg-per-kg-poore.csv` is the OWID full grapher CSV downloaded on 2026-10-13 from https://ourworldindata.org/grapher/ghg-per-kg-poore.csv?v=1&csvType=full&useColumnShortNames=false. It contains 37 food-category entities with 2010 study reference values based on Poore & Nemecek (2018). OWID chart/data attribution is CC BY; retain attribution to Our World in Data and the original providers. These global average category factors are not product- or India-specific. The SHA-256 checksum is recorded in each imported factor row.
+`ghg-per-kg-poore.csv` is the OWID full grapher CSV downloaded on 2026-10-13 from https://ourworldindata.org/grapher/ghg-per-kg-poore.csv?v=1&csvType=full&useColumnShortNames=false. It contains 38 food-category entities with 2010 study reference values based on Poore & Nemecek (2018). OWID chart/data attribution is CC BY; retain attribution to Our World in Data and the original providers. These global average category factors are not product- or India-specific. The SHA-256 checksum is recorded in each imported factor row.
 
 ## Reviewed factor input format for other sources
 

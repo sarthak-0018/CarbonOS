@@ -30,6 +30,9 @@ export async function updateReceiptItem(receiptId, itemId, profileId, changes) {
 export async function confirmReceipt(receiptId, profileId) {
   return request(`/api/receipts/${receiptId}/confirm?profile_id=${profileId}`, { method: 'POST' });
 }
+export async function recalculateReceipt(receiptId, profileId) {
+  return request(`/api/receipts/${receiptId}/recalculate?profile_id=${profileId}`, { method: 'POST' });
+}
 export async function getReceipts(profileId) { return request(`/api/receipts?profile_id=${profileId}`); }
 export async function getReceipt(receiptId, profileId) { return request(`/api/receipts/${receiptId}?profile_id=${profileId}`); }
 export async function updateReceipt(receiptId, profileId, changes) {

@@ -116,7 +116,10 @@ def parse_lines(lines: list[OCRLine]):
         if found:
             header_row=row; headers=found
             continue
-        if re.search(r"\b(grand\s+total|net\s+amount|amount\s+due|bill\s+total)\b",text,re.I):
+        # Receipts commonly print only "TOTAL" (sometimes with a currency marker),
+        # so treat the standalone label as a total too. This branch runs before the
+        # generic footer filter below, which otherwise discards that line.
+        if re.search(r"\b(grand\s+total|(?<!sub)(?<!sub-)(?<!sub )total|net\s+amount|amount\s+due|bill\s+total)\b",text,re.I):
             vals=numeric_tokens(text)
             if vals: total=vals[-1][1]
             continue
@@ -289,4 +292,4 @@ def calculate_item(session, item):
     if not factor or factor.value_kg_co2e_per_unit is None: item.emissions_status="FACTOR_UNAVAILABLE"; return
     item.emissions_kg_co2e=(mass*factor.value_kg_co2e_per_unit).quantize(Decimal("0.000001")); item.matched_factor_id=factor.id
     item.emissions_status="CALCULATED"
-    item.calculation_details={"mass_kg":str(mass),"mass_source":amount_source,"factor":str(factor.value_kg_co2e_per_unit),"factor_unit":"kgCO2e/kg","factor_id":str(factor.id),"factor_source":factor.source_name,"factor_url":factor.source_url,"limitation":"Global category-average lifecycle proxy; not India- or product-specific."}
+    item.calculation_details={"mass_kg":str(mass),"mass_source":amount_source,"factor":str(factor.value_kg_co2e_per_unit),"factor_unit":"kgCO2e/kg","factor_id":str(factor.id),"factor_source":factor.source_name,"factor_url":factor.source_url,"factor_version":factor.source_version,"data_version":factor.data_version,"source_year":factor.source_year,"reference_period_start":str(factor.reference_period_start) if factor.reference_period_start else None,"reference_period_end":str(factor.reference_period_end) if factor.reference_period_end else None,"methodology":factor.methodology_note,"formula":f"{mass} kg × {factor.value_kg_co2e_per_unit} kgCO2e/kg = {item.emissions_kg_co2e} kgCO2e","limitation":"Global category-average lifecycle proxy; not India- or product-specific."}

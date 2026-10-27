@@ -1,9 +1,295 @@
 {
-  "rice": ["rice", "chawal", "चावल", "तांदूळ"],
-  "wheat": ["wheat", "गेहूं", "गहू"],
-  "milk": ["milk", "दूध"],
-  "potato": ["potato", "potatoes", "aloo", "आलू", "बटाटा", "बटाटे"],
-  "onion": ["onion", "onions", "pyaaz", "प्याज", "कांदा"],
-  "tomato": ["tomato", "tomatoes", "टमाटर", "टोमॅटो"],
-  "pulses": ["dal", "daal", "दाल", "डाळ"]
+  "apples": [
+    "apple",
+    "apples",
+    "सेब",
+    "सफरचंद"
+  ],
+  "bananas": [
+    "banana",
+    "bananas",
+    "केला",
+    "केले",
+    "केळी"
+  ],
+  "barley": [
+    "barley",
+    "जौ",
+    "जव"
+  ],
+  "beef_beef_herd": [
+    "beef beef herd"
+  ],
+  "beef_dairy_herd": [
+    "dairy beef"
+  ],
+  "beet_sugar": [
+    "beet sugar"
+  ],
+  "berries_grapes": [
+    "berries",
+    "berry",
+    "grapes",
+    "grape",
+    "अंगूर",
+    "द्राक्ष"
+  ],
+  "brassicas": [
+    "cabbage",
+    "cauliflower",
+    "broccoli",
+    "फूलगोभी",
+    "पत्तागोभी",
+    "कोबी"
+  ],
+  "cane_sugar": [
+    "cane sugar"
+  ],
+  "cassava": [
+    "cassava",
+    "tapioca",
+    "साबूदाना"
+  ],
+  "cheese": [
+    "cheese",
+    "paneer",
+    "पनीर",
+    "चीज़"
+  ],
+  "citrus_fruit": [
+    "orange",
+    "oranges",
+    "lemon",
+    "lemons",
+    "lime",
+    "citrus",
+    "संतरा",
+    "नींबू",
+    "मोसंबी"
+  ],
+  "coffee": [
+    "coffee",
+    "कॉफी",
+    "coffee powder",
+    "instant coffee"
+  ],
+  "dark_chocolate": [
+    "dark chocolate",
+    "डार्क चॉकलेट"
+  ],
+  "eggs": [
+    "egg",
+    "eggs",
+    "अंडा",
+    "अंडे"
+  ],
+  "fish_farmed": [
+    "farmed fish",
+    "rohu",
+    "rohu fish"
+  ],
+  "groundnuts": [
+    "groundnut",
+    "groundnuts",
+    "peanut",
+    "peanuts",
+    "मूंगफली",
+    "शेंगदाणे"
+  ],
+  "lamb_mutton": [
+    "lamb",
+    "mutton",
+    "मटन",
+    "भेड़ का मांस"
+  ],
+  "maize": [
+    "maize",
+    "corn",
+    "मक्का",
+    "भुट्टा"
+  ],
+  "milk": [
+    "milk",
+    "cow milk",
+    "whole milk",
+    "toned milk",
+    "full cream milk",
+    "दूध"
+  ],
+  "nuts": [
+    "almond",
+    "almonds",
+    "cashew",
+    "cashews",
+    "walnut",
+    "walnuts",
+    "pistachio",
+    "pistachios",
+    "पिस्ता",
+    "काजू",
+    "बादाम"
+  ],
+  "oatmeal": [
+    "oat",
+    "oats",
+    "oatmeal",
+    "जई"
+  ],
+  "onions_leeks": [
+    "onion",
+    "onions",
+    "leek",
+    "leeks",
+    "pyaaz",
+    "प्याज",
+    "कांदा"
+  ],
+  "other_fruit": [
+    "mango",
+    "mangoes",
+    "papaya",
+    "guava",
+    "pineapple",
+    "अनार",
+    "आम",
+    "पपीता",
+    "अमरूद"
+  ],
+  "other_pulses": [
+    "dal",
+    "daal",
+    "pulses",
+    "lentils",
+    "chickpeas",
+    "chana",
+    "moong",
+    "moong dal",
+    "mung dal",
+    "masoor",
+    "toor",
+    "अरहर",
+    "दाल",
+    "डाळ",
+    "चना",
+    "मसूर",
+    "मूंग",
+    "arhar dal",
+    "toor dal",
+    "chana dal",
+    "urad dal",
+    "masoor dal",
+    "rajma",
+    "kidney beans",
+    "chickpeas",
+    "chole"
+  ],
+  "other_vegetables": [
+    "vegetables",
+    "mixed vegetables",
+    "cucumber",
+    "cucumbers",
+    "capsicum",
+    "bell pepper",
+    "okra",
+    "bhindi",
+    "brinjal",
+    "eggplant",
+    "spinach",
+    "garlic",
+    "fresh garlic",
+    "ginger",
+    "fresh ginger",
+    "green chilli",
+    "green chili",
+    "green chillies",
+    "green chilis",
+    "पालक",
+    "भिंडी",
+    "बैंगन",
+    "ककड़ी",
+    "खीरा"
+  ],
+  "peas": [
+    "peas",
+    "green peas",
+    "मटर",
+    "वाटाणा"
+  ],
+  "pig_meat": [
+    "pork"
+  ],
+  "potatoes": [
+    "potato",
+    "potatoes",
+    "aloo",
+    "आलू",
+    "बटाटा",
+    "बटाटे"
+  ],
+  "poultry_meat": [
+    "chicken",
+    "turkey",
+    "poultry",
+    "मुर्गा",
+    "चिकन"
+  ],
+  "prawns_farmed": [
+    "farmed prawns",
+    "farmed shrimp"
+  ],
+  "rice": [
+    "rice",
+    "basmati rice",
+    "brown rice",
+    "white rice",
+    "sona masoori rice",
+    "chawal",
+    "चावल",
+    "तांदूळ"
+  ],
+  "root_vegetables": [
+    "carrot",
+    "carrots",
+    "beetroot",
+    "radish",
+    "turnip",
+    "गाजर",
+    "मूली",
+    "चुकंदर"
+  ],
+  "soy_milk": [
+    "soy milk",
+    "soya milk"
+  ],
+  "tofu": [
+    "tofu",
+    "सोया पनीर"
+  ],
+  "tomatoes": [
+    "tomato",
+    "tomatoes",
+    "टमाटर",
+    "टोमॅटो"
+  ],
+  "wheat_rye": [
+    "wheat",
+    "wheat flour",
+    "whole wheat flour",
+    "rye",
+    "atta",
+    "गेहूं",
+    "गहू",
+    "आटा",
+    "atta",
+    "whole wheat atta",
+    "wheat flour",
+    "chapati flour"
+  ],
+  "wine": [
+    "wine"
+  ],
+  "ghee": [
+    "ghee",
+    "clarified butter"
+  ]
 }

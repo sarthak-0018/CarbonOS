@@ -41,7 +41,7 @@ def extracted_rows(lines):
             "quantity":item.quantity,"unit":item.unit,"unit_inferred":False,
             "package_size":size,"package_size_unit":size_unit,"mrp":None,
             "price_column_value":price,"price_column_semantics":"UNIT_PRICE" if price is not None else "UNKNOWN",
-            "metadata":{"extraction_method":"ollama-qwen3","total_price":str(item.total_price) if item.total_price is not None else None,
+            "metadata":{"extraction_method":"ollama-qwen3","brand":matched.get("brand"),"total_price":str(item.total_price) if item.total_price is not None else None,
                         "source_line_numbers":item.source_line_numbers,"warnings":[] if price is not None else ["Selling price not identifiable"]},
             "unit_price":price,"line_total":item.total_price,"category":matched["category"],
             "match_method":matched["method"],"match_confidence":matched["confidence"],
@@ -82,12 +82,32 @@ def owned(db, profile_id, receipt_id):
     if not receipt: raise HTTPException(404,detail={"code":"RESOURCE_NOT_FOUND","message":"Receipt not found"})
     return receipt
 
+def calculate_receipt(receipt, db):
+    """Refresh every eligible line and summarize how much of the receipt is covered."""
+    for item in receipt.items:
+        if not item.user_corrected:
+            match = match_product(item.normalized_product_name or item.raw_product_name)
+            item.food_category = match["category"]
+            item.match_method = match["method"]
+            item.match_confidence = match["confidence"]
+            item.source_metadata = {**(item.source_metadata or {}), "brand": match.get("brand")}
+        calculate_item(db, item)
+    statuses = [item.emissions_status for item in receipt.items]
+    calculated = sum(status == "CALCULATED" for status in statuses)
+    receipt.calculation_status = (
+        "COMPLETE" if statuses and calculated == len(statuses)
+        else "PARTIAL" if calculated
+        else "UNAVAILABLE" if statuses
+        else "NOT_CALCULATED"
+    )
+    return calculated
+
 def output(receipt):
-    items=[{"id":str(i.id),"raw_text":i.raw_text,"product_name":i.normalized_product_name or i.raw_product_name,"quantity":float(i.quantity) if i.quantity is not None else None,"unit":i.quantity_unit,"quantity_unit_inferred":i.quantity_unit_inferred,"package_size":float(i.package_size) if i.package_size is not None else None,"package_size_unit":i.package_size_unit,"total_content_quantity":float(total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit)[0]) if total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit) else None,"total_content_unit":total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit)[1] if total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit) else None,"mrp":float(i.mrp) if i.mrp is not None else None,"price_column_value":float(i.price_column_value) if i.price_column_value is not None else None,"price_column_semantics":i.price_column_semantics,"suggested_category":i.source_metadata.get("suggested_category"),"unit_price":float(i.unit_price) if i.unit_price is not None else None,"line_total":float(i.line_total) if i.line_total is not None else None,"food_category":i.food_category,"match_method":i.match_method,"match_confidence":float(i.match_confidence) if i.match_confidence is not None else None,"needs_confirmation":not bool(i.food_category),"warnings":i.source_metadata.get("warnings",[]),"emissions_status":i.emissions_status,"emissions_kg_co2e":float(i.emissions_kg_co2e) if i.emissions_kg_co2e is not None else None,"calculation_details":i.calculation_details,"ocr_confidence":float(i.ocr_confidence) if i.ocr_confidence is not None else None,"parsing_confidence":float(i.parse_confidence) if i.parse_confidence is not None else None,"user_corrected":i.user_corrected} for i in receipt.items]
+    items=[{"id":str(i.id),"raw_text":i.raw_text,"product_name":i.normalized_product_name or i.raw_product_name,"brand":i.source_metadata.get("brand"),"quantity":float(i.quantity) if i.quantity is not None else None,"unit":i.quantity_unit,"quantity_unit_inferred":i.quantity_unit_inferred,"package_size":float(i.package_size) if i.package_size is not None else None,"package_size_unit":i.package_size_unit,"total_content_quantity":float(total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit)[0]) if total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit) else None,"total_content_unit":total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit)[1] if total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit) else None,"mrp":float(i.mrp) if i.mrp is not None else None,"price_column_value":float(i.price_column_value) if i.price_column_value is not None else None,"price_column_semantics":i.price_column_semantics,"suggested_category":i.source_metadata.get("suggested_category"),"unit_price":float(i.unit_price) if i.unit_price is not None else None,"line_total":float(i.line_total) if i.line_total is not None else None,"food_category":i.food_category,"match_method":i.match_method,"match_confidence":float(i.match_confidence) if i.match_confidence is not None else None,"needs_confirmation":not bool(i.food_category),"warnings":i.source_metadata.get("warnings",[]),"emissions_status":i.emissions_status,"emissions_kg_co2e":float(i.emissions_kg_co2e) if i.emissions_kg_co2e is not None else None,"calculation_details":i.calculation_details,"ocr_confidence":float(i.ocr_confidence) if i.ocr_confidence is not None else None,"parsing_confidence":float(i.parse_confidence) if i.parse_confidence is not None else None,"user_corrected":i.user_corrected} for i in receipt.items]
     calculated=[i for i in items if i["emissions_kg_co2e"] is not None]
     warnings=receipt.processing_error.split(" | ") if receipt.processing_error else []
     if receipt.total_amount is None: warnings.append("Receipt total was not detected; review it against the image.")
-    return {"id":str(receipt.id),"profile_id":str(receipt.profile_id),"merchant_name":receipt.merchant_name,"store_address":receipt.store_address,"receipt_date":receipt.receipt_date,"invoice_number":receipt.invoice_number,"gstin":receipt.gstin,"subtotal":float(receipt.subtotal) if receipt.subtotal is not None else None,"discount_total":float(receipt.discount_total) if receipt.discount_total is not None else None,"tax_total":float(receipt.tax_total) if receipt.tax_total is not None else None,"total_amount":float(receipt.total_amount) if receipt.total_amount is not None else None,"currency":receipt.currency,"ocr_status":receipt.ocr_status,"processing_error":receipt.processing_error,"calculation_status":receipt.calculation_status,"raw_ocr_text":receipt.raw_ocr_text,"ocr_lines":receipt.ocr_data or [],"ocr_engine":receipt.ocr_engine,"created_at":receipt.created_at,"items":items,"warnings":warnings,"summary":{"calculated_items":len(calculated),"total_items":len(items),"estimated_kg_co2e":sum(i["emissions_kg_co2e"] for i in calculated)}}
+    return {"id":str(receipt.id),"profile_id":str(receipt.profile_id),"merchant_name":receipt.merchant_name,"store_address":receipt.store_address,"receipt_date":receipt.receipt_date,"invoice_number":receipt.invoice_number,"gstin":receipt.gstin,"subtotal":float(receipt.subtotal) if receipt.subtotal is not None else None,"discount_total":float(receipt.discount_total) if receipt.discount_total is not None else None,"tax_total":float(receipt.tax_total) if receipt.tax_total is not None else None,"total_amount":float(receipt.total_amount) if receipt.total_amount is not None else None,"currency":receipt.currency,"ocr_status":receipt.ocr_status,"processing_error":receipt.processing_error,"calculation_status":receipt.calculation_status,"raw_ocr_text":receipt.raw_ocr_text,"ocr_lines":receipt.ocr_data or [],"ocr_engine":receipt.ocr_engine,"created_at":receipt.created_at,"items":items,"warnings":warnings,"summary":{"calculation_status":receipt.calculation_status,"calculated_items":len(calculated),"unestimated_items":len(items)-len(calculated),"total_items":len(items),"estimated_kg_co2e":sum(i["emissions_kg_co2e"] for i in calculated)}}
 
 @router.post("/scan")
 async def scan(request: Request, db: Db):
@@ -138,6 +158,7 @@ async def scan(request: Request, db: Db):
     receipt.merchant_name=header["store_name"]; receipt.store_address=header["store_address"]; receipt.receipt_date=header["purchase_date"]; receipt.invoice_number=header["invoice_number"]; receipt.gstin=header["gstin"]; receipt.subtotal=header["subtotal"]; receipt.discount_total=header["discount_total"]; receipt.tax_total=header["tax_total"]; receipt.total_amount=header["total_amount"]; receipt.currency=header["currency"] or "INR"
     for index,row in enumerate(parsed):
         receipt.items.append(ReceiptItem(line_index=index,raw_text=row["raw_text"],raw_product_name=row["name"],normalized_product_name=row["normalized_name"],quantity=row["quantity"],quantity_unit=row["unit"],quantity_unit_inferred=row["unit_inferred"],package_size=row["package_size"],package_size_unit=row["package_size_unit"],mrp=row["mrp"],price_column_value=row["price_column_value"],price_column_semantics=row["price_column_semantics"],source_metadata=row["metadata"],unit_price=row["unit_price"],line_total=row["line_total"],food_category=row["category"],match_method=row["match_method"],match_confidence=row["match_confidence"],ocr_confidence=row["confidence"],parse_confidence=row["parsing_confidence"],quantity_evidence="INFERRED" if row["unit_inferred"] else "OCR",emissions_status="NEEDS_REVIEW",calculation_details={}))
+    calculate_receipt(receipt, db)
     db.commit(); db.refresh(receipt)
     return output(receipt)
 
@@ -160,7 +181,7 @@ def edit_item(receipt_id: UUID,item_id: UUID,profile_id: UUID,payload: ItemPatch
         item.normalized_product_name=changes["product_name"]
         if "food_category" not in changes:
             match=match_product(changes["product_name"])
-            item.food_category=match["category"]; item.match_method=match["method"]; item.match_confidence=match["confidence"]
+            item.food_category=match["category"]; item.match_method=match["method"]; item.match_confidence=match["confidence"]; item.source_metadata={**(item.source_metadata or {}),"brand":match.get("brand")}
     if "quantity" in changes: item.quantity=changes["quantity"]
     if "unit" in changes:
         item.quantity_unit=changes["unit"]
@@ -184,7 +205,7 @@ def edit_item(receipt_id: UUID,item_id: UUID,profile_id: UUID,payload: ItemPatch
         elif changes["price_column_semantics"] in ("LINE_AMOUNT","USER_CONFIRMED_LINE_AMOUNT"): item.line_total=item.price_column_value
         else: item.unit_price=None; item.line_total=None
     item.user_corrected=True; item.quantity_evidence="USER_CORRECTED"
-    item.emissions_kg_co2e=None; item.matched_factor_id=None; item.calculation_details={}; item.emissions_status="NEEDS_REVIEW"
+    calculate_item(db, item); calculate_receipt(receipt, db)
     db.commit()
     return output(owned(db,profile_id,receipt_id))
 
@@ -194,7 +215,7 @@ def add_item(receipt_id: UUID,profile_id: UUID,payload: ItemCreate,db: Db):
     if receipt.confirmed_at: raise HTTPException(409,detail={"code":"RECEIPT_CONFIRMED","message":"This confirmed receipt is read-only."})
     if payload.unit not in (None,"kg","g","l","ml","each","packet","pack","pouch","bottle","box","tin","bag","bunch","dozen"): raise HTTPException(422,detail={"code":"UNSUPPORTED_UNIT","message":"Choose a supported grocery unit."})
     item=ReceiptItem(line_index=max((row.line_index for row in receipt.items),default=-1)+1,raw_text=payload.product_name,raw_product_name=payload.product_name,normalized_product_name=payload.product_name,quantity=payload.quantity,quantity_unit=payload.unit,line_total=payload.line_total,quantity_evidence="USER_ENTERED",emissions_status="NEEDS_REVIEW",user_corrected=True,calculation_details={})
-    receipt.items.append(item); db.commit(); return output(owned(db,profile_id,receipt_id))
+    receipt.items.append(item); calculate_receipt(receipt, db); db.commit(); return output(owned(db,profile_id,receipt_id))
 
 @router.delete("/{receipt_id}/items/{item_id}")
 def remove_item(receipt_id: UUID,item_id: UUID,profile_id: UUID,db: Db):
@@ -202,7 +223,7 @@ def remove_item(receipt_id: UUID,item_id: UUID,profile_id: UUID,db: Db):
     if receipt.confirmed_at: raise HTTPException(409,detail={"code":"RECEIPT_CONFIRMED","message":"This confirmed receipt is read-only."})
     item=next((row for row in receipt.items if row.id==item_id),None)
     if not item: raise HTTPException(404,detail={"code":"ITEM_NOT_FOUND","message":"Receipt item not found"})
-    receipt.items.remove(item); db.delete(item); db.commit(); return output(owned(db,profile_id,receipt_id))
+    receipt.items.remove(item); db.delete(item); calculate_receipt(receipt, db); db.commit(); return output(owned(db,profile_id,receipt_id))
 
 class ReceiptPatch(BaseModel):
     merchant_name: str|None=Field(default=None,max_length=200)
@@ -254,6 +275,7 @@ def retry_processing(receipt_id: UUID,profile_id: UUID,db: Db):
         receipt.items.clear()
         for index,row in enumerate(extracted):
             receipt.items.append(ReceiptItem(line_index=index,raw_text=row["raw_text"],raw_product_name=row["name"],normalized_product_name=row["normalized_name"],quantity=row["quantity"],quantity_unit=row["unit"],quantity_unit_inferred=row["unit_inferred"],package_size=row["package_size"],package_size_unit=row["package_size_unit"],mrp=row["mrp"],price_column_value=row["price_column_value"],price_column_semantics=row["price_column_semantics"],source_metadata=row["metadata"],unit_price=row["unit_price"],line_total=row["line_total"],food_category=row["category"],match_method=row["match_method"],match_confidence=row["match_confidence"],ocr_confidence=row["confidence"],parse_confidence=row["parsing_confidence"],quantity_evidence="INFERRED" if row["unit_inferred"] else "OCR",emissions_status="NEEDS_REVIEW",calculation_details={}))
+        calculate_receipt(receipt, db)
         receipt.processing_error=" | ".join(header["warnings"]+([header["reconciliation_warning"]] if header["reconciliation_warning"] else [])) or None
         db.commit(); return output(owned(db,profile_id,receipt_id))
     except Exception as exc:
@@ -268,7 +290,7 @@ def confirm(receipt_id: UUID,profile_id: UUID,db: Db):
     receipt=owned(db,profile_id,receipt_id)
     if any(not (item.normalized_product_name or item.raw_product_name or "").strip() for item in receipt.items):
         raise HTTPException(422,detail={"code":"ITEM_DESCRIPTION_REQUIRED","message":"Every receipt row needs a product description or must be removed before confirmation."})
-    for item in receipt.items: calculate_item(db,item)
+    calculate_receipt(receipt, db)
     receipt.ocr_status="CONFIRMED"; receipt.confirmed_at=receipt.confirmed_at or datetime.now(timezone.utc)
     statuses=[i.emissions_status for i in receipt.items]
     receipt.calculation_status="COMPLETE" if statuses and all(s=="CALCULATED" for s in statuses) else "PARTIAL" if any(s=="CALCULATED" for s in statuses) else "UNAVAILABLE"
@@ -286,5 +308,5 @@ def confirm(receipt_id: UUID,profile_id: UUID,db: Db):
 @router.post("/{receipt_id}/recalculate")
 def recalculate(receipt_id: UUID,profile_id: UUID,db: Db):
     receipt=owned(db,profile_id,receipt_id)
-    for item in receipt.items: calculate_item(db,item)
+    calculate_receipt(receipt, db)
     db.commit(); return output(owned(db,profile_id,receipt_id))

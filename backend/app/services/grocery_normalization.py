@@ -4,10 +4,13 @@ from __future__ import annotations
 import json
 import re
 import unicodedata
+from functools import lru_cache
 from decimal import Decimal
 from pathlib import Path
 
 ALIASES_PATH = Path(__file__).resolve().parents[1] / "data" / "product_aliases.json"
+USDA_ALIASES_PATH = Path(__file__).resolve().parents[1] / "data" / "usda_food_aliases.json"
+BRANDS_PATH = Path(__file__).resolve().parents[1] / "data" / "product_brands.json"
 
 
 def normalize_unit(unit: str | None) -> str | None:
@@ -33,17 +36,36 @@ def normalize_product_text(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip()
 
 
-def match_product(value: str) -> dict:
-    """Return an evidence-backed alias match; preserve uncertainty explicitly."""
-    normalized = normalize_product_text(value)
+@lru_cache(maxsize=1)
+def _product_aliases() -> tuple[tuple[str, tuple[tuple[str, str], ...], str], ...]:
+    """Load curated aliases first, followed by the USDA-derived vocabulary."""
+    compiled = []
+    for path in (ALIASES_PATH, USDA_ALIASES_PATH):
+        try:
+            document = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for category, entries in document.items():
+            compiled.append((category, tuple((alias, normalize_product_text(alias)) for alias in entries),
+                             "EXACT_ALIAS" if path == ALIASES_PATH else "USDA_FOOD_ALIAS"))
+    return tuple(compiled)
+
+
+@lru_cache(maxsize=1)
+def _brand_aliases() -> tuple[tuple[str, str], ...]:
     try:
-        aliases = json.loads(ALIASES_PATH.read_text(encoding="utf-8"))
+        document = json.loads(BRANDS_PATH.read_text(encoding="utf-8-sig"))
     except (OSError, json.JSONDecodeError):
-        aliases = {}
-    # Match whole leading/trailing tokens and retain quantity/variant words in the display name.
-    for canonical, entries in aliases.items():
-        for alias in entries:
-            candidate = normalize_product_text(alias)
+        return ()
+    return tuple(sorted(
+        ((normalize_product_text(alias), brand) for brand, aliases in document.items() for alias in aliases),
+        key=lambda entry: len(entry[0]), reverse=True,
+    ))
+
+
+def _match_alias(normalized: str) -> dict | None:
+    for canonical, entries, method in _product_aliases():
+        for alias, candidate in entries:
             if normalized == candidate:
                 tail = ""
             elif normalized.startswith(candidate + " "):
@@ -55,8 +77,37 @@ def match_product(value: str) -> dict:
             else:
                 continue
             if normalized == candidate or tail:
-                return {"normalized_name": normalized, "category": canonical, "method": "EXACT_ALIAS", "confidence": 0.96, "needs_confirmation": False, "evidence": alias}
-    return {"normalized_name": normalized, "category": None, "method": None, "confidence": None, "needs_confirmation": True, "evidence": None}
+                return {"category": canonical, "method": method,
+                        "confidence": 0.96 if method == "EXACT_ALIAS" else 0.90,
+                        "needs_confirmation": False, "evidence": alias}
+    return None
+
+
+def match_product(value: str) -> dict:
+    """Return an evidence-backed alias match; preserve uncertainty explicitly."""
+    normalized = normalize_product_text(value)
+    direct = _match_alias(normalized)
+    if direct:
+        return {"normalized_name": normalized, "brand": None, **direct}
+
+    # Only remove a brand when it is an explicit, leading, known brand alias.
+    # This preserves the raw product name and prevents arbitrary prefixes being discarded.
+    for brand_alias, brand in _brand_aliases():
+        prefix = brand_alias + " "
+        if not normalized.startswith(prefix):
+            continue
+        product = normalized[len(prefix):].strip()
+        # Known milk product-line labels are brand descriptors, not food identities.
+        product = re.sub(r"^(?:taaza|gold|slim n trim|slim|premium)\s+", "", product)
+        matched = _match_alias(product)
+        if matched:
+            return {"normalized_name": normalized, "brand": brand,
+                    "method": "BRAND_PREFIX_ALIAS", "confidence": 0.92,
+                    "needs_confirmation": False, "evidence": matched["evidence"],
+                    "category": matched["category"]}
+        break
+    return {"normalized_name": normalized, "brand": None, "category": None,
+            "method": None, "confidence": None, "needs_confirmation": True, "evidence": None}
 
 
 def parse_indian_amount(text: str) -> Decimal | None:

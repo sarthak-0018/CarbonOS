@@ -3,7 +3,7 @@ import argparse, csv, json, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "backend"))
+sys.path.insert(0, str(ROOT / "backend" if (ROOT / "backend/app").exists() else ROOT))
 from app.database.session import SessionLocal
 from app.services.emission_factor_service import EmissionFactorService
 
