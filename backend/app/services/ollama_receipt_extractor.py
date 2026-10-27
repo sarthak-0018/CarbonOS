@@ -16,6 +16,8 @@ class ExtractedItem(BaseModel):
     item_name: str = Field(min_length=1, max_length=240)
     quantity: Decimal | None = Field(default=None, gt=0, max_digits=12, decimal_places=4)
     unit: Literal["kg", "g", "l", "ml", "each", "piece", "pack", "packet", "bottle", "box", "bag", "pouch", "tin", "bunch", "dozen"] | None = None
+    package_size: Decimal | None = Field(default=None, gt=0, max_digits=12, decimal_places=4)
+    package_size_unit: Literal["kg", "g", "l", "ml"] | None = None
     price: Decimal | None = Field(default=None, ge=0, max_digits=12, decimal_places=2)
     total_price: Decimal | None = Field(default=None, ge=0, max_digits=12, decimal_places=2)
     source_line_numbers: list[int] = Field(min_length=1)
@@ -72,7 +74,11 @@ def _validated_output(content: str) -> Extraction:
         if isinstance(unit, str):
             canonical = _UNIT_ALIASES.get(unit.strip().casefold())
             row["unit"] = canonical  # Unknown strings remain null; never guess a unit.
-        for field in ("quantity", "price", "total_price"):
+        package_unit = row.get("package_size_unit")
+        if isinstance(package_unit, str):
+            canonical_package_unit = _UNIT_ALIASES.get(package_unit.strip().casefold())
+            row["package_size_unit"] = canonical_package_unit if canonical_package_unit in {"kg", "g", "l", "ml"} else None
+        for field in ("quantity", "package_size", "price", "total_price"):
             value = row.get(field)
             if isinstance(value, (str, int, float)) and not isinstance(value, bool):
                 try:
@@ -96,11 +102,13 @@ def extract_items(lines: list) -> Extraction:
         "type": "object", "additionalProperties": False, "required": ["items"],
         "properties": {"items": {"type": "array", "items": {
             "type": "object", "additionalProperties": False,
-            "required": ["item_name", "quantity", "unit", "price", "total_price", "source_line_numbers"],
+            "required": ["item_name", "quantity", "unit", "package_size", "package_size_unit", "price", "total_price", "source_line_numbers"],
             "properties": {
                 "item_name": {"type": "string"},
                 "quantity": {"type": ["number", "null"]},
                 "unit": {"type": ["string", "null"]},
+                "package_size": {"type": ["number", "null"]},
+                "package_size_unit": {"type": ["string", "null"], "enum": ["kg", "g", "l", "ml", None]},
                 "price": {"type": ["number", "null"]},
                 "total_price": {"type": ["number", "null"]},
                 "source_line_numbers": {"type": "array", "items": {"type": "integer"}, "minItems": 1},
@@ -108,11 +116,15 @@ def extract_items(lines: list) -> Extraction:
         }}}
     }
     prompt = """Extract purchased grocery/product line items from this OCR with layout coordinates.
-Use only values explicitly supported by OCR. Never infer missing quantity, unit or price.
+Use only values explicitly supported by OCR. Never infer missing purchase quantity, unit or price.
 Ignore store/customer details, tax, subtotal, totals, payment and footer rows.
 For MRP/RATE/AMOUNT columns, price is RATE (selling price per purchased unit), never MRP;
 total_price is printed AMOUNT when identified. For QTY/AMOUNT without RATE, price is null.
-Do not turn pack size in a description into purchased quantity. Keep pack count and size distinct.
+Keep purchase quantity/unit separate from printed net content/package_size/package_size_unit.
+For 2 packs of Almond 200 g, return quantity=2, unit=pack, package_size=200,
+package_size_unit=g. Never replace the pack count with 400 g. Extract printed juice/drink
+net content as ml or l, but never infer a volume unit merely from the product category.
+If no purchased count is printed, leave quantity null rather than assuming one pack.
 For genuinely ambiguous price columns, price must be null. Return exact zero-based source_line_numbers
 using each OCR entry's line field; cite every line used for the item and no nonexistent lines.
 Return only the required JSON schema."""

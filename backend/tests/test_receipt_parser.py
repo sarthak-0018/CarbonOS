@@ -1,7 +1,23 @@
 from decimal import Decimal
-from app.receipts import OCRLine, parse_lines, parse_receipt, parse_date, redact_sensitive_text
+from app.receipts import OCRLine, parse_lines, parse_receipt, parse_date, redact_sensitive_text, total_package_contents, calculate_item
 from app.services.grocery_normalization import match_product, normalize_unit, parse_indian_amount
 from app.services.receipt_table_parser import parse_decimal_token, extract_package_size
+
+def test_explicit_pack_count_multiplies_printed_net_content_for_carbon_mass():
+    class Session:
+        def scalar(self, _query):
+            return type("Factor", (), {"id":"f1", "value_kg_co2e_per_unit":Decimal("2"), "source_name":"fixture", "source_url":None})()
+    item=type("Item", (), {"food_category":"almonds", "quantity":Decimal("2"), "quantity_unit":"pack",
+        "package_size":Decimal("200"), "package_size_unit":"g", "emissions_kg_co2e":None,
+        "matched_factor_id":None, "calculation_details":{}, "emissions_status":None})()
+    assert total_package_contents(item.quantity,item.quantity_unit,item.package_size,item.package_size_unit)==(Decimal("400"),"g")
+    calculate_item(Session(),item)
+    assert item.calculation_details["mass_kg"]=="0.4"
+    assert item.calculation_details["mass_source"]=="purchase_count_times_printed_package_size"
+    assert item.emissions_kg_co2e==Decimal("0.800000")
+
+def test_volume_pack_contents_are_derived_but_not_converted_to_mass():
+    assert total_package_contents(Decimal("3"),"bottle",Decimal("200"),"ml")== (Decimal("600"),"ml")
 
 def test_receipt_totals_are_not_products_and_explicit_quantities_are_parsed():
     lines=[OCRLine("RICE 1 kg 140.00",.97,[[0,0],[10,0],[10,5],[0,5]]),

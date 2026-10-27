@@ -14,6 +14,7 @@ def test_qwen_extraction_sends_layout_and_validates_strict_json(monkeypatch):
         seen.update(json.loads(request.content))
         return httpx.Response(200, json={"message": {"content": json.dumps({"items": [{
             "item_name": "Rice", "quantity": 2, "unit": "kg", "price": 60,
+            "package_size": None, "package_size_unit": None,
             "total_price": 120, "source_line_numbers": [0, 1]
         }]})}})
     monkeypatch.setattr(httpx, "Client", lambda **kwargs: real_client(transport=httpx.MockTransport(handler), **kwargs))
@@ -25,6 +26,7 @@ def test_qwen_extraction_sends_layout_and_validates_strict_json(monkeypatch):
 
     assert isinstance(result, Extraction)
     assert result.items[0].price == 60
+    assert result.items[0].package_size is None
     assert "bounds" in seen["messages"][1]["content"]
     assert seen["format"]["properties"]["items"]
     assert seen["think"] is False
@@ -41,16 +43,19 @@ def test_rejects_additional_fields_and_missing_source_evidence():
 def test_normalizes_safe_decimal_and_unit_variants_before_strict_validation():
     result = _validated_output(json.dumps({"items": [{
         "item_name": "Rice", "quantity": "2.000", "unit": "KG", "price": "60.00",
+        "package_size": "200", "package_size_unit": "g",
         "total_price": 120, "source_line_numbers": [1]
     }]}))
     assert result.items[0].quantity.as_tuple().digits == (2, 0, 0, 0)
     assert result.items[0].unit == "kg"
     assert result.items[0].price.as_tuple().digits == (6, 0, 0, 0)
+    assert result.items[0].package_size == 200
 
 
 def test_unknown_unit_becomes_null_and_does_not_guess():
     result = _validated_output(json.dumps({"items": [{
         "item_name": "Unknown item", "quantity": 2, "unit": "crate", "price": None,
+        "package_size": 500, "package_size_unit": "crate",
         "total_price": None, "source_line_numbers": [0]
     }]}))
     assert result.items[0].unit is None

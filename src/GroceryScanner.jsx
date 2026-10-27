@@ -159,6 +159,7 @@ export default function GroceryScanner() {
         </div><div className="receipt-total">{receipt.total_amount != null ? `${receipt.currency || 'Currency not detected'} ${receipt.total_amount.toFixed(2)}` : 'Total not detected'}</div></div>
 
         {receipt.ocr_status === 'FAILED' && <div className="card activity-empty" role="alert"><b>Receipt reading failed.</b><span>{receipt.processing_error || 'Local OCR could not process this image.'}</span><button className="button" disabled={busy} onClick={retry}>Retry local OCR</button></div>}
+        {receipt.ocr_status === 'REVIEW_REQUIRED' && !receipt.items.some(item => item.user_corrected) && <button className="quiet-button" disabled={busy} onClick={retry}>Re-run extraction with current model</button>}
         {receipt.warnings?.map((warning, index) => <div className="save-error" role="status" key={index}>{warning}</div>)}
         {preview && <div className="card receipt-preview"><img src={preview} alt="Uploaded grocery receipt for comparison"/></div>}
 
@@ -181,6 +182,7 @@ export default function GroceryScanner() {
             return <article className="card receipt-item" key={item.id}>
               <div className="receipt-item-head"><b>Line {index + 1}</b><span className={`receipt-state ${item.needs_confirmation ? 'NEEDS_REVIEW' : item.emissions_status}`}>{item.needs_confirmation ? 'needs product review' : item.emissions_status.replaceAll('_', ' ')}</span></div>
               <small className="receipt-raw">Receipt text: {item.raw_text || 'Manually added — enter the printed description.'} · OCR confidence {item.ocr_confidence == null ? 'not available' : `${Math.round(item.ocr_confidence * 100)}%`}</small>
+              {item.total_content_quantity != null && <small className="receipt-raw">Total contents: {item.total_content_quantity} {item.total_content_unit} across {item.quantity} {item.unit}{Number(item.quantity) === 1 ? '' : 's'} ({item.package_size} {item.package_size_unit} each).</small>}
               <small className="receipt-raw">{item.match_method ? `Product match: ${item.match_method.replaceAll('_', ' ').toLowerCase()} · ${item.match_confidence == null ? 'confidence unavailable' : `${Math.round(item.match_confidence * 100)}%`}` : 'No automatic product match; select a category only when supported.'}</small>
               <div className="receipt-fields">
                 <label>Product description<input aria-label={`Product description line ${index + 1}`} value={draft.product_name ?? ''} onChange={e => setItemField(item.id, 'product_name', e.target.value)}/></label>

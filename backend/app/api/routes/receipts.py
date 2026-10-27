@@ -11,7 +11,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 from app.api.dependencies import get_session
 from app.models.domain import Profile, Receipt, ReceiptItem, EmissionFactor, Activity
-from app.receipts import validate_image, preprocess_image, parse_receipt, calculate_item, redact_sensitive_text
+from app.receipts import validate_image, preprocess_image, parse_receipt, calculate_item, redact_sensitive_text, total_package_contents
 from app.ocr.base import OCRLine
 from app.ocr.ocr_service import get_ocr_provider
 from app.services.grocery_normalization import match_product
@@ -33,6 +33,8 @@ def extracted_rows(lines):
         if not evidence: raise ValueError("EXTRACTION_SOURCE_MISSING")
         raw=" ".join(line.text.strip() for line in evidence)
         name,size,size_unit=extract_package_size(item.item_name)
+        if item.package_size is not None and item.package_size_unit is not None:
+            size,size_unit=item.package_size,item.package_size_unit
         matched=match_product(name)
         price=item.price
         rows.append({"raw_text":raw,"name":name,"normalized_name":matched["normalized_name"],
@@ -81,7 +83,7 @@ def owned(db, profile_id, receipt_id):
     return receipt
 
 def output(receipt):
-    items=[{"id":str(i.id),"raw_text":i.raw_text,"product_name":i.normalized_product_name or i.raw_product_name,"quantity":float(i.quantity) if i.quantity is not None else None,"unit":i.quantity_unit,"quantity_unit_inferred":i.quantity_unit_inferred,"package_size":float(i.package_size) if i.package_size is not None else None,"package_size_unit":i.package_size_unit,"mrp":float(i.mrp) if i.mrp is not None else None,"price_column_value":float(i.price_column_value) if i.price_column_value is not None else None,"price_column_semantics":i.price_column_semantics,"suggested_category":i.source_metadata.get("suggested_category"),"unit_price":float(i.unit_price) if i.unit_price is not None else None,"line_total":float(i.line_total) if i.line_total is not None else None,"food_category":i.food_category,"match_method":i.match_method,"match_confidence":float(i.match_confidence) if i.match_confidence is not None else None,"needs_confirmation":not bool(i.food_category),"warnings":i.source_metadata.get("warnings",[]),"emissions_status":i.emissions_status,"emissions_kg_co2e":float(i.emissions_kg_co2e) if i.emissions_kg_co2e is not None else None,"calculation_details":i.calculation_details,"ocr_confidence":float(i.ocr_confidence) if i.ocr_confidence is not None else None,"parsing_confidence":float(i.parse_confidence) if i.parse_confidence is not None else None,"user_corrected":i.user_corrected} for i in receipt.items]
+    items=[{"id":str(i.id),"raw_text":i.raw_text,"product_name":i.normalized_product_name or i.raw_product_name,"quantity":float(i.quantity) if i.quantity is not None else None,"unit":i.quantity_unit,"quantity_unit_inferred":i.quantity_unit_inferred,"package_size":float(i.package_size) if i.package_size is not None else None,"package_size_unit":i.package_size_unit,"total_content_quantity":float(total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit)[0]) if total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit) else None,"total_content_unit":total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit)[1] if total_package_contents(i.quantity,i.quantity_unit,i.package_size,i.package_size_unit) else None,"mrp":float(i.mrp) if i.mrp is not None else None,"price_column_value":float(i.price_column_value) if i.price_column_value is not None else None,"price_column_semantics":i.price_column_semantics,"suggested_category":i.source_metadata.get("suggested_category"),"unit_price":float(i.unit_price) if i.unit_price is not None else None,"line_total":float(i.line_total) if i.line_total is not None else None,"food_category":i.food_category,"match_method":i.match_method,"match_confidence":float(i.match_confidence) if i.match_confidence is not None else None,"needs_confirmation":not bool(i.food_category),"warnings":i.source_metadata.get("warnings",[]),"emissions_status":i.emissions_status,"emissions_kg_co2e":float(i.emissions_kg_co2e) if i.emissions_kg_co2e is not None else None,"calculation_details":i.calculation_details,"ocr_confidence":float(i.ocr_confidence) if i.ocr_confidence is not None else None,"parsing_confidence":float(i.parse_confidence) if i.parse_confidence is not None else None,"user_corrected":i.user_corrected} for i in receipt.items]
     calculated=[i for i in items if i["emissions_kg_co2e"] is not None]
     warnings=receipt.processing_error.split(" | ") if receipt.processing_error else []
     if receipt.total_amount is None: warnings.append("Receipt total was not detected; review it against the image.")
@@ -234,7 +236,9 @@ def receipt_image(receipt_id: UUID,profile_id: UUID,db: Db):
 def retry_processing(receipt_id: UUID,profile_id: UUID,db: Db):
     receipt=owned(db,profile_id,receipt_id)
     if receipt.ocr_status=="CONFIRMED": raise HTTPException(409,detail={"code":"RECEIPT_CONFIRMED","message":"Confirmed receipts cannot be reprocessed."})
-    if receipt.ocr_status not in ("FAILED","PROCESSING"): raise HTTPException(409,detail={"code":"RETRY_NOT_ALLOWED","message":"Only failed or interrupted processing can be retried."})
+    if receipt.ocr_status not in ("FAILED","PROCESSING","REVIEW_REQUIRED"): raise HTTPException(409,detail={"code":"RETRY_NOT_ALLOWED","message":"Only unconfirmed receipt extraction can be retried."})
+    if receipt.ocr_status=="REVIEW_REQUIRED" and any(item.user_corrected for item in receipt.items):
+        raise HTTPException(409,detail={"code":"RECEIPT_HAS_USER_EDITS","message":"This receipt has saved item edits and cannot be replaced by automatic re-extraction."})
     storage=Path(os.getenv("RECEIPT_STORAGE_DIR","./uploads/receipts")).resolve(); target=(storage/Path(receipt.image_storage_key).name).resolve()
     if storage not in target.parents or not target.is_file(): raise HTTPException(404,detail={"code":"IMAGE_NOT_FOUND","message":"Receipt image is unavailable."})
     receipt.ocr_status="PROCESSING"; receipt.processing_error=None; db.commit()

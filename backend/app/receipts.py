@@ -259,14 +259,34 @@ def categorize_candidate(description: str):
         if re.search(pattern,text): return category,"REVIEWED_CATEGORY_ALIAS"
     return None,None
 
+PACKAGE_COUNT_UNITS = {"each", "piece", "pack", "packet", "bottle", "box", "bag", "pouch", "tin"}
+
+
+def total_package_contents(quantity, quantity_unit, package_size, package_size_unit):
+    """Return the total printed contents when both pack count and net size are known."""
+    if (quantity is None or package_size is None or package_size_unit not in {"kg", "g", "l", "ml"}
+            or quantity_unit not in PACKAGE_COUNT_UNITS):
+        return None
+    return Decimal(quantity) * Decimal(package_size), package_size_unit
+
+
 def calculate_item(session, item):
     item.emissions_kg_co2e=None; item.matched_factor_id=None; item.calculation_details={}
     if not item.food_category: item.emissions_status="NEEDS_REVIEW"; return
-    if item.quantity is None or item.quantity_unit not in ("kg","g"): item.emissions_status="QUANTITY_UNAVAILABLE"; return
+    if item.quantity is None: item.emissions_status="QUANTITY_UNAVAILABLE"; return
+    if item.quantity_unit in ("kg", "g"):
+        mass=Decimal(item.quantity)/Decimal(1000) if item.quantity_unit=="g" else Decimal(item.quantity)
+        amount_source="receipt_quantity"
+    else:
+        contents=total_package_contents(item.quantity,item.quantity_unit,item.package_size,item.package_size_unit)
+        if contents is None or contents[1] not in ("kg", "g"):
+            item.emissions_status="QUANTITY_UNAVAILABLE"; return
+        quantity,unit=contents
+        mass=quantity/Decimal(1000) if unit=="g" else quantity
+        amount_source="purchase_count_times_printed_package_size"
     key="food_"+item.food_category.lower().replace(" ","_")+"_kg"
     factor=session.scalar(select(EmissionFactor).where(EmissionFactor.factor_key==key,EmissionFactor.geography_code=="GLOBAL",EmissionFactor.status=="APPROVED",EmissionFactor.gas=="CO2E",EmissionFactor.activity_unit=="kg"))
     if not factor or factor.value_kg_co2e_per_unit is None: item.emissions_status="FACTOR_UNAVAILABLE"; return
-    mass=Decimal(item.quantity)/Decimal(1000) if item.quantity_unit=="g" else Decimal(item.quantity)
     item.emissions_kg_co2e=(mass*factor.value_kg_co2e_per_unit).quantize(Decimal("0.000001")); item.matched_factor_id=factor.id
     item.emissions_status="CALCULATED"
-    item.calculation_details={"mass_kg":str(mass),"factor":str(factor.value_kg_co2e_per_unit),"factor_unit":"kgCO2e/kg","factor_id":str(factor.id),"factor_source":factor.source_name,"factor_url":factor.source_url,"limitation":"Global category-average lifecycle proxy; not India- or product-specific."}
+    item.calculation_details={"mass_kg":str(mass),"mass_source":amount_source,"factor":str(factor.value_kg_co2e_per_unit),"factor_unit":"kgCO2e/kg","factor_id":str(factor.id),"factor_source":factor.source_name,"factor_url":factor.source_url,"limitation":"Global category-average lifecycle proxy; not India- or product-specific."}
